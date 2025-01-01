@@ -1,7 +1,7 @@
 /*------------------------------------------------------------
- * @file		validation.c
+ * @file	validation.c
  * @author	Josh Hayden
- * @brief		Validation of the user input.
+ * @brief	Validation of the user input.
  *----------------------------------------------------------*/
 
 #include <stdio.h>
@@ -9,8 +9,8 @@
 #include "validation.h"
 
 bool validate_arg_count(int argc) {
-    if (argc <= 1 || argc > 3) {
-        fprintf(stderr, "Usage: [config_file] directory\n");
+    if (argc <= 1 || argc > 2) {
+        fprintf(stderr, "Usage: nc-scout <directory>\n");
         fprintf(stderr, "Error: Incorrect number of arguments.\n");
         return false;
     }

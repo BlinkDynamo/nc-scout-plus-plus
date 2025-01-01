@@ -1,23 +1,16 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Iinclude
-SRC = src/nc-scout.c src/validation.c src/config.c src/naming.c
-OBJ = $(SRC:src/%.c=build/%.o)
-TARGET = build/nc-scout
+SRCS = src/nc-scout.c src/validation.c src/config.c src/naming.c
+OBJS = $(SRCS:.c=.o)
+EXEC = build/nc-scout
 
-all: $(TARGET)
+all: $(EXEC)
 
-$(TARGET): $(OBJ)
-	$(CC) $(CFLAGS) -o $@ $(OBJ)
+$(EXEC): $(OBJS)
+	$(CC) $(OBJS) -o $(EXEC)
 
-build/%.o: src/%.c
-	mkdir -p build
+src/%.o: src/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -rf build
-
-test: all
-	@echo "Running tests (to be implemented)..."
-
-.PHONY: all clean test
-
+	rm -f $(OBJS) $(EXEC)
