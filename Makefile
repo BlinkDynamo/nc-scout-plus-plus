@@ -1,16 +1,21 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Iinclude
-SRCS = src/nc-scout.c src/validation.c src/config.c src/naming.c
-OBJS = $(SRCS:.c=.o)
+OBJ_DIR = build
+SRC_DIR = src
+SRCS = src/nc-scout.c src/validate.c src/naming.c
+OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o)
 EXEC = build/nc-scout
 
-all: $(EXEC)
+all: $(OBJ_DIR) $(EXEC) 
 
 $(EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $(EXEC)
 
-src/%.o: src/%.c
+$(OBJ_DIR)/$(SRC_DIR)/%.o: src/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJS) $(EXEC)
+	rm -rf $(OBJ_DIR) 
+
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)/$(SRC_DIR)
