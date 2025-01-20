@@ -3,10 +3,6 @@
 
 #include <stdbool.h>
 
-bool naming_check_camelcase(const char *file_name, const char *naming_convention);
-
-bool naming_check_snakecase(const char *file_name, const char *naming_convention);
-
-bool naming_check_kebabcase(const char *file_name, const char *naming_convention);
+bool naming_match_regex(const char *pattern, const char *file_name);
 
 #endif

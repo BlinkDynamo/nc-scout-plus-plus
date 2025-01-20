@@ -6,19 +6,23 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <regex.h>
+
 #include "naming.h"
 
-bool naming_check_camelcase(const char *file_name, const char *naming_convention) {
-	printf("%s\n", file_name);
-	return true;
-}
+bool naming_match_regex(const char *pattern, const char *file_name) {
+	regex_t regex;
+	int regex_return;
 
-bool naming_check_snakecase(const char *file_name, const char *naming_convention) {
-	printf("%s\n", file_name);
-	return true;
-}
+	/* compile the regex */
+	if (regcomp(&regex, pattern, REG_EXTENDED) != 0) {
+		fprintf(stderr, "Error: Failed to compile regex\n");
+	}
 
-bool naming_check_kebabcase(const char *file_name, const char *naming_convention) {
-	printf("%s\n", file_name);
-	return true;
+	/* execute the regex */
+	regex_return = regexec(&regex, file_name, 0, NULL, 0);
+	if (regex_return == 0) {
+		return true;
+	}
+	return false;
 }

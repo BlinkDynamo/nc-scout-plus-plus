@@ -7,4 +7,4 @@ bool validate_arg_count(int argc);
 
 bool validate_directory_exists(const char *dir_path);
 
-#endif // VALIDATION_H
+#endif 
