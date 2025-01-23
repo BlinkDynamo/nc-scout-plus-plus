@@ -14,6 +14,10 @@
 #include "validate.h"
 #include "naming.h"
 
+#define EXPR_CAMELCASE "^([a-z]+)([A-Z]?[a-z]+)+$"
+#define EXPR_SNAKECASE "[_]+"
+#define EXPR_KEBABCASE "[-]+"
+
 void search_directory(const char *dir_path, const char *arg_Convention, int *matches);
 
 int main(int argc, char *argv[]) {
@@ -51,11 +55,20 @@ void search_directory(const char *dir_path, const char *arg_Convention, int *mat
 			 * naming_match_regex(), pass it in, then increment *matches if it returns true. */	
 			void helper_naming_match_regex() {	
 				if (strcmp("camelcase", arg_Convention) == 0) {
-					if (naming_match_regex("^[a-z]", dp->d_name)) (*matches)++;
+					if (naming_match_regex(EXPR_CAMELCASE, dp->d_name)) {
+						printf("%s\n", dp->d_name); 
+						(*matches)++;
+					}
 				} else if (strcmp("snakecase", arg_Convention) == 0) {
-					if (naming_match_regex("[0-9][0-9]", dp->d_name)) (*matches)++;
+					if (naming_match_regex(EXPR_SNAKECASE, dp->d_name)) {
+						printf("%s\n", dp->d_name); 
+						(*matches)++;
+					}
 				} else if (strcmp("kebabcase", arg_Convention) == 0) {
-					if (naming_match_regex("[0-9][0-9]", dp->d_name)) (*matches)++;
+					if (naming_match_regex(EXPR_KEBABCASE, dp->d_name)) {
+						printf("%s\n", dp->d_name); 
+						(*matches)++;
+					}
 				} else {
 					fprintf(stderr, "Error: '%s' is not a valid naming convention\n", arg_Convention);
 					closedir(dir);
