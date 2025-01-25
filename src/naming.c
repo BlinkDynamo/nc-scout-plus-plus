@@ -1,8 +1,8 @@
-/*------------------------------------------------------------
+/*
  * @file	naming.c
  * @author	Josh Hayden
  * @brief	Compares a filename and a convention.
- *----------------------------------------------------------*/
+ */
 
 #include <stdio.h>
 #include <string.h>
@@ -10,19 +10,19 @@
 
 #include "naming.h"
 
-bool naming_match_regex(const char *pattern, const char *file_name) {
+bool naming_match_regex(const char *pattern, const char *file_name)
+{
 	regex_t regex;
 	int regex_return;
 
-	/* compile the regex */
 	if (regcomp(&regex, pattern, REG_EXTENDED) != 0) {
 		fprintf(stderr, "Error: Failed to compile regex\n");
 	}
 
-	/* execute the regex */
 	regex_return = regexec(&regex, file_name, 0, NULL, 0);
 	if (regex_return == 0) {
 		return true;
 	}
+
 	return false;
 }
