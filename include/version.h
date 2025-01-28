@@ -5,4 +5,3 @@
 #define PROGRAM_NAME "nc-scout"
 
 #endif
-

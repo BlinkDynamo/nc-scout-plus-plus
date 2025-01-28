@@ -1,7 +1,6 @@
 /*
  * @file	validate.c
  * @author	Josh Hayden
- * @brief	Validation of the user input.
  */
 
 #include <stdio.h>
@@ -42,4 +41,3 @@ bool validate_arg_naming_convention(const char *arg_naming_convention)
 		return false;
 	}
 }
-

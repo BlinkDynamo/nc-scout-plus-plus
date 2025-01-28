@@ -1,7 +1,6 @@
 /*
  * @file	naming.c
- * @author	Josh Hayden
- * @brief	Compares a filename and a convention.
+ * @author	Josh Hayden	
  */
 
 #include <stdio.h>
@@ -10,6 +9,7 @@
 
 #include "naming.h"
 
+/* Applies a regex pattern upon a filename, returning true if a match. */
 bool naming_match_regex(const char *pattern, const char *file_name)
 {
 	regex_t regex;

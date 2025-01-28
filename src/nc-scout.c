@@ -1,7 +1,6 @@
 /*
  * @file	nc-scout.c
  * @author	Josh Hayden
- * @brief	An extremely simple naming convention checker.
  */
 
 #include <stdio.h>
@@ -17,7 +16,7 @@
 static int full_path_flag;
 
 /* 
- * expects a supported naming convention and existing directory in argv[1] and argv[2] respectively. If given these arguments, 
+ * Expects a supported naming convention and existing directory in argv[1] and argv[2] respectively. If given these arguments, 
  * after asserting they are valid, recursively search the directory for regex matches to the convention and print them to stdout.
  */ 
 int subc_exec_search(int argc, char *argv[])
@@ -80,7 +79,7 @@ int main(int argc, char *argv[])
 		
 		int option_index = 0;
 		current_opt = getopt_long (argc, argv, "vhf", long_options, &option_index);
-		/* break if at the end of the options */
+		/* Break if at the end of the options. */
 		if (current_opt == -1)
 			break;
 
@@ -106,8 +105,8 @@ int main(int argc, char *argv[])
 	struct subcommand 
 	{	
 		char *name;
-		int n_required_args; /* only sub-arguments to the subcommand. Does not include the subcommand itself. */
-		int (*execute)(int argc, char *argv[]); /* pointer to the function that executes a subcommand */
+		int n_required_args; /* Only sub-arguments to the subcommand. Does not include the subcommand itself. */
+		int (*execute)(int argc, char *argv[]); /* Pointer to the function that executes a subcommand. */
 	};
 
 	struct subcommand subcommands[] = 
@@ -117,14 +116,14 @@ int main(int argc, char *argv[])
 
 	int n_subcommands = sizeof(subcommands) / sizeof(subcommands[0]);	
 	
-	/* check for no arguments given */
+	/* Check for no arguments given. */
 	if ((argc - optind) < 1) { 
 		printf("\nIncorrect usage.\nDo `nc-scout --help` for more information about usage.\n");
 		return EXIT_FAILURE;
 	}
 
-	/* for the remaining command line arguments (non-options), check if the first of them is a subcommand.
-	 * If so, return the appropriate subc_exec function with these remaining arguments */
+	/* For the remaining command line arguments (non-options), check if the first of them is a subcommand.
+	 * If so, return the appropriate subc_exec function with these remaining arguments. */
 	if (optind < argc) {
 		bool subcommand_valid_match_found = false;
 
@@ -140,4 +139,3 @@ int main(int argc, char *argv[])
 		}
 	}
 }
-
