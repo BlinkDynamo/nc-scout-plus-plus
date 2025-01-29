@@ -9,16 +9,6 @@
 
 #include "validate.h"
 
-bool validate_arg_count(int argc)
-{
-	if (argc != 3) {
-		fprintf(stderr, "Usage: nc-scout <convention> <directory>\n");
-		fprintf(stderr, "Error: Incorrect number of arguments.\n");
-		return false;
-	}
-	return true;
-}
-
 bool validate_target_dirname_exists(const char *target_dirname)
 {
 	if (access(target_dirname, F_OK) != 0) {

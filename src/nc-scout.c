@@ -26,8 +26,7 @@ int subc_exec_search(int argc, char *argv[])
 
 	int matches = 0;
 	
-	if ((validate_arg_count(argc)) &&
-	   (validate_target_dirname_exists(arg_target_dirname)) &&
+	if ((validate_target_dirname_exists(arg_target_dirname)) &&
 	   (validate_arg_naming_convention(arg_naming_convention))) {
 		search_directory(arg_target_dirname, arg_naming_convention, &matches);
 		printf("%d\n", matches);
@@ -122,14 +121,16 @@ int main(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
-	/* For the remaining command line arguments (non-options), check if the first of them is a subcommand.
-	 * If so, return the appropriate subc_exec function with these remaining arguments. */
+	/* For the remaining command line arguments (non-options), check if the first of them is a subcommand, followed
+	 * by a correct number of arguments for that subcommand's n_required_args. If so, return the appropriate subc_exec 
+	 * function with these followed arguments. */
 	if (optind < argc) {
 		bool subcommand_valid_match_found = false;
-
 		for (int i = 0; i < n_subcommands; i++) {
-			if (strcmp(argv[optind], subcommands[i].name) == 0) 
-			return subcommands[i].execute(argc - optind, &argv[optind]);
+			int non_option_argc = argc - optind;
+			if ((strcmp(argv[optind], subcommands[i].name) == 0) && 
+			    (subcommands[i].n_required_args == (non_option_argc - 1))) /* -1 to account for command itself */
+			return subcommands[i].execute(non_option_argc, &argv[optind]);
 		}
 
 		if (!subcommand_valid_match_found) {
