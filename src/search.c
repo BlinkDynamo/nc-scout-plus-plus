@@ -13,10 +13,19 @@
 #include "validate.h"
 #include "naming.h"
 #include "search.h"
+#include "nc-scout.h"
 
 #define EXPR_CAMELCASE "^([a-z]+)([A-Z][a-z]+)+$"
 #define EXPR_SNAKECASE "^[a-z]+(_[a-z]+)+$"
 #define EXPR_KEBABCASE "^[a-z]+(-[a-z]+)+$"
+
+void print_formatted_match_output(struct dirent *dp, char full_path[PATH_MAX])
+{
+	if (full_path_flag == 1)
+		printf("%s%s\n", full_path, dp->d_name);
+	else
+		printf("%s\n", dp->d_name);
+}
 
 /* 
  * Moves recursively down dir_path, looking for files and directories that match the naming 
@@ -24,10 +33,10 @@
  */
 void search_directory(const char *dir_path, const char *arg_naming_convention, int *matches)
 {
-	/* dir_path is known to be valid at this point. */
+	/* dir_path is known to be valid at this point. */	
 	DIR *dir = opendir(dir_path);	
+
 	struct dirent *dp;
-	
 	char *search_expression;
 	if (strcmp("camelcase", arg_naming_convention) == 0)		search_expression = EXPR_CAMELCASE;
 	else if (strcmp("snakecase", arg_naming_convention) == 0)	search_expression = EXPR_SNAKECASE;
@@ -39,21 +48,27 @@ void search_directory(const char *dir_path, const char *arg_naming_convention, i
 			continue;
 
 		char full_path[PATH_MAX];
-		snprintf(full_path, sizeof(full_path), "%s/%s", dir_path, dp->d_name);
+		if (dir_path[strlen(dir_path) - 1] == '/') {
+			snprintf(full_path, sizeof(full_path), "%s%s", dir_path, dp->d_name);
+		} else {
+			snprintf(full_path, sizeof(full_path), "%s/%s", dir_path, dp->d_name);
+		}
 
 		struct stat statbuf;
 		if (stat(full_path, &statbuf) == 0) {
 			if (S_ISDIR(statbuf.st_mode)) {
 				/* If it's a directory, check it's name then recurse. */
 				if (naming_match_regex(search_expression, dp->d_name)) {
-					printf("%s\n", dp->d_name); 
+					printf("%s\n", full_path);
+					//print_formatted_match_output(dp, full_path);	
 					(*matches)++;
 				} 
 				/* Recurse each subdirectory. */
 				search_directory(full_path, arg_naming_convention, matches);
 			} else if (S_ISREG(statbuf.st_mode)) { 
 				if (naming_match_regex(search_expression, dp->d_name)) {
-					printf("%s\n", dp->d_name); 
+					printf("%s\n", full_path);
+					//print_formatted_match_output(dp, full_path);	
 					(*matches)++;
 				} 
 			}	
