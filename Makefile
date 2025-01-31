@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Iinclude
+CFLAGS = -std=c99 -pedantic -Wall -Wextra -Iinclude 
 OBJ_DIR = build
 SRC_DIR = src
 SRCS = src/nc-scout.c src/validate.c src/naming.c src/search.c	
