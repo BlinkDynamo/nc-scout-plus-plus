@@ -16,13 +16,14 @@
 
 /* flag externs */
 int full_path_flag = 0;
+int matches_flag = 0;
 
-/* 
+/*
  * Expects a supported naming convention and existing directory in argv[1] and argv[2] respectively. If given these arguments, 
  * after asserting they are valid, recursively search the directory for regex matches to the convention and print them to stdout.
- */ 
+ */
 int subc_exec_search(int argc, char *argv[])
-{		
+{
 	const char *arg_naming_convention = argv[1];
 	const char *arg_target_dirname = argv[2]; 
 
@@ -36,7 +37,7 @@ int subc_exec_search(int argc, char *argv[])
 	return EXIT_FAILURE;
 }
 
-int subc_exec_help()
+int subc_exec_help(int argc, char *argv[])
 {
 	char *message = 
 	"Usage: nc-scout [OPTION]? [COMMAND] [CONVENTION] [DIRECTORY]\n"
@@ -51,18 +52,30 @@ int subc_exec_help()
 	"\n"
 	"Conventions:\n"
 	"  camelcase        exampleFileName.txt\n"
-        "  snakecase        example_file_name.txt\n"
-	"  kebabcase        example-file-name.txt\n"	
+	"  snakecase        example_file_name.txt\n"
+	"  kebabcase        example-file-name.txt\n"
 	"";
-
-	printf("%s", message);
-	return EXIT_SUCCESS;
+	/* Input must be either nc-scout -h or nc-scout --help exactly to recieve the general nc-scout help. 
+	 * Otherwise, they likely intend to recieve help regarding a command directly preceding -h or --help. */
+	if (argc == 2) {
+		printf("%s", message);
+		return EXIT_SUCCESS;
+	} else {
+		printf("\nIncorrect usage.\nDo `nc-scout --help` for more information about usage.\n");
+		return EXIT_FAILURE;
+	}
 }
 
-int subc_exec_version()
+int subc_exec_version(int argc, char *argv[])
 {	
-	printf("%s %s\n", PROGRAM_NAME, PROGRAM_VERSION);
-	return EXIT_SUCCESS;
+	/* Input must be either nc-scout -v or nc-scout --version exactly. */
+	if (argc == 2) {
+		printf("%s %s\n", PROGRAM_NAME, PROGRAM_VERSION);
+		return EXIT_SUCCESS;
+	} else {
+		printf("\nIncorrect usage.\nDo `nc-scout --help` for more information about usage.\n");
+		return EXIT_FAILURE;
+	}
 }
 
 int main(int argc, char *argv[]) 
@@ -94,11 +107,11 @@ int main(int argc, char *argv[])
 			return subc_exec_help(argc, argv);
 
 		case 'f':
-			full_path_flag = 1;	
+			full_path_flag = 1;
 			break;
 
 		default:
-			abort();	
+			abort();
 		}
 	}
 	
@@ -114,7 +127,7 @@ int main(int argc, char *argv[])
 		{"search", 2, subc_exec_search}
 	};
 
-	int n_subcommands = sizeof(subcommands) / sizeof(subcommands[0]);	
+	int n_subcommands = sizeof(subcommands) / sizeof(subcommands[0]);
 	
 	/* Check for no arguments given. */
 	if ((argc - optind) < 1) { 
