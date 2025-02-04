@@ -61,7 +61,7 @@ int subc_exec_help(int argc, char *argv[])
 		printf("%s", message);
 		return EXIT_SUCCESS;
 	} else {
-		printf("\nIncorrect usage.\nDo `nc-scout --help` for more information about usage.\n");
+		printf("Incorrect usage.\nDo `nc-scout --help` for more information about usage.\n");
 		return EXIT_FAILURE;
 	}
 }
@@ -73,7 +73,7 @@ int subc_exec_version(int argc, char *argv[])
 		printf("%s %s\n", PROGRAM_NAME, PROGRAM_VERSION);
 		return EXIT_SUCCESS;
 	} else {
-		printf("\nIncorrect usage.\nDo `nc-scout --help` for more information about usage.\n");
+		printf("Incorrect usage.\nDo `nc-scout --help` for more information about usage.\n");
 		return EXIT_FAILURE;
 	}
 }
@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
 	
 	/* Check for no arguments given. */
 	if ((argc - optind) < 1) { 
-		printf("\nIncorrect usage.\nDo `nc-scout --help` for more information about usage.\n");
+		printf("Incorrect usage.\nDo `nc-scout --help` for more information about usage.\n");
 		return EXIT_FAILURE;
 	}
 
