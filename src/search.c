@@ -30,12 +30,12 @@ void print_search_results(struct dirent *dp, char full_path[PATH_MAX])
 
 /* 
  * Moves recursively down dir_path, looking for files and directories that match the naming 
- * convention `arg_naming_convention`. Increments `matches` on a successfully matching filename.
+ * convention `arg_naming_convention`.
  */
-void search_directory(const char *dir_path, const char *arg_naming_convention, int *matches)
+void search_directory(const char *dir_path, const char *arg_naming_convention)
 {
-	/* dir_path is known to be valid at this point. */	
-	DIR *dir = opendir(dir_path);	
+	/* dir_path is known to be valid at this point. */
+	DIR *dir = opendir(dir_path);
 
 	struct dirent *dp;
 	char *search_expression;
@@ -61,16 +61,14 @@ void search_directory(const char *dir_path, const char *arg_naming_convention, i
 				/* If it's a directory, check it's name then recurse. */
 				if (naming_match_regex(search_expression, dp->d_name)) {
 					print_search_results(dp, full_path);	
-					(*matches)++;
 				} 
 				/* Recurse each subdirectory. */
-				search_directory(full_path, arg_naming_convention, matches);
+				search_directory(full_path, arg_naming_convention);
 			} else if (S_ISREG(statbuf.st_mode)) { 
 				if (naming_match_regex(search_expression, dp->d_name)) {
 					print_search_results(dp, full_path);	
-					(*matches)++;
-				} 
-			}	
+				}
+			}
 		}
 	}
 	closedir(dir);

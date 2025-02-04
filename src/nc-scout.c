@@ -16,7 +16,6 @@
 
 /* flag externs */
 int full_path_flag = 0;
-int matches_flag = 0;
 
 /*
  * Expects a supported naming convention and existing directory in argv[1] and argv[2] respectively. If given these arguments, 
@@ -27,11 +26,9 @@ int subc_exec_search(int argc, char *argv[])
 	const char *arg_naming_convention = argv[1];
 	const char *arg_target_dirname = argv[2]; 
 
-	int matches = 0;
 	if ((validate_target_dirname_exists(arg_target_dirname)) &&
 	   (validate_arg_naming_convention(arg_naming_convention))) {
-		search_directory(arg_target_dirname, arg_naming_convention, &matches);
-		printf("%d\n", matches);
+		search_directory(arg_target_dirname, arg_naming_convention);
 		return EXIT_SUCCESS;
 	}
 	return EXIT_FAILURE;
