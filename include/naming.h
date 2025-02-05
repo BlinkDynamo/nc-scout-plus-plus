@@ -1,3 +1,9 @@
+/*
+ * @author	Josh Hayden
+ * @file	naming.h
+ * @license	GPL-3.0
+ */
+
 #ifndef NAMING_H
 #define NAMING_H
 

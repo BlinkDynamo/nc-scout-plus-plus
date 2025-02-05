@@ -1,3 +1,9 @@
+/*
+ * @author	Josh Hayden
+ * @file	version.h
+ * @license	GPL-3.0
+ */
+
 #ifndef VERSION_H
 #define VERSION_H
 

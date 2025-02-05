@@ -1,6 +1,7 @@
 /*
  * @file	validate.c
  * @author	Josh Hayden
+ * @license	GPL-3.0
  */
 
 #include <stdio.h>

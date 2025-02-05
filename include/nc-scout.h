@@ -1,3 +1,9 @@
+/*
+ * @author	Josh Hayden
+ * @file	nc-scout.h
+ * @license	GPL-3.0
+ */
+
 #ifndef NCSCOUT_H
 #define NCSCOUT_H
 

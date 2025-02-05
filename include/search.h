@@ -1,3 +1,9 @@
+/*
+ * @author	Josh Hayden
+ * @file	search.h
+ * @license	GPL-3.0
+ */
+
 #ifndef SEARCH_H
 #define SEARCH_H
 
