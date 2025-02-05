@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <string.h>
 #include <getopt.h>
 
@@ -15,7 +16,8 @@
 #include "version.h"
 
 /* flag externs */
-int full_path_flag = 0;
+bool full_path_flag = false;
+bool matches_flag = false;
 
 /*
  * Expects a supported naming convention and existing directory in argv[1] and argv[2] respectively. If given these arguments, 
@@ -42,10 +44,11 @@ int subc_exec_help(int argc, char *argv[])
 	"Options:\n"
 	"  -h, --help       Show this help message\n"
 	"  -v, --version    Show the program version\n"
-	" -f, --full-path   Display matches as a full path\n"
+	" -f, --full-path   Display files as a full path\n"
+	" -m, --matches     Display files that match the provided naming convention\n"
 	"\n"
 	"Commands:\n"
-	"  search           Search for matches to a naming convention in a directory\n"
+	"  search           Search for filenames that do not match a naming convention in a directory\n"
 	"\n"
 	"Conventions:\n"
 	"  camelcase        exampleFileName.txt\n"
@@ -84,27 +87,34 @@ int main(int argc, char *argv[])
 			{"version", no_argument, 0, 'v'},
 			{"help", no_argument, 0, 'h'},
 			{"full-path", no_argument, 0, 'f'},
+			{"matches", no_argument, 0, 'm'},
 			{0, 0, 0, 0}
 		};
 		
 		int option_index = 0;
-		current_opt = getopt_long (argc, argv, "vhf", long_options, &option_index);
+		current_opt = getopt_long (argc, argv, "vhfm", long_options, &option_index);
 		/* Break if at the end of the options. */
 		if (current_opt == -1)
 			break;
 
 		switch (current_opt) {
+		/* These options return a function */
 		case '?':
 			/* Check for unknown options first. Exit program if found. */
 			return EXIT_FAILURE;
+
 		case 'v':
 			return subc_exec_version(argc, argv);
 
 		case 'h':
 			return subc_exec_help(argc, argv);
-
+		/* These options set flags */
 		case 'f':
-			full_path_flag = 1;
+			full_path_flag = true;
+			break;
+
+		case 'm':
+			matches_flag = true;
 			break;
 
 		default:

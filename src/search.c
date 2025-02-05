@@ -16,21 +16,36 @@
 #include "search.h"
 #include "nc-scout.h"
 
-#define EXPR_CAMELCASE "^([a-z]+)([A-Z][a-z]+)+$"
-#define EXPR_SNAKECASE "^[a-z]+(_[a-z]+)+$"
-#define EXPR_KEBABCASE "^[a-z]+(-[a-z]+)+$"
+#define EXPR_CAMELCASE "^([a-z]+)([A-Z][a-z0-9]+)+$"
+#define EXPR_SNAKECASE "^[a-z0-9]+(_[a-z0-9]+)+$"
+#define EXPR_KEBABCASE "^[a-z0-9]+(-[a-z0-9]+)+$"
 
-void print_search_results(struct dirent *dp, char full_path[PATH_MAX])
+/* Prints a d_name formatted according to full_path_flag. Depends on full_path_flag to be accessible. */
+void print_filename(struct dirent *dp, char full_path[PATH_MAX])
 {
-	if (full_path_flag == 1)
+	if (full_path_flag == true)
 		printf("%s%s\n", full_path, dp->d_name);
-	else
+
+	else if (full_path_flag == false)
 		printf("%s\n", dp->d_name);
 }
 
+/* Compares a d_name to a regular expression. Depends on matches_flag to be accessible. */
+void process_current_file(struct dirent *dp, char full_path[PATH_MAX], char *search_expression)
+{
+	if (matches_flag == true) {
+		if (naming_match_regex(search_expression, dp->d_name))
+			print_filename(dp, full_path);
+	} 
+	else if (matches_flag == false) {
+		if (!naming_match_regex(search_expression, dp->d_name))
+			print_filename(dp, full_path);
+	}	
+}
+	
 /* 
- * Moves recursively down dir_path, looking for files and directories that match the naming 
- * convention `arg_naming_convention`.
+ * Moves recursively down dir_path, looking for files and directories that match or do not match the naming 
+ * convention `arg_naming_convention`, depending on the state of matches_flag.
  */
 void search_directory(const char *dir_path, const char *arg_naming_convention)
 {
@@ -58,16 +73,11 @@ void search_directory(const char *dir_path, const char *arg_naming_convention)
 		struct stat statbuf;
 		if (stat(full_path, &statbuf) == 0) {
 			if (S_ISDIR(statbuf.st_mode)) {
-				/* If it's a directory, check it's name then recurse. */
-				if (naming_match_regex(search_expression, dp->d_name)) {
-					print_search_results(dp, full_path);	
-				} 
+				process_current_file(dp, full_path, search_expression);
 				/* Recurse each subdirectory. */
 				search_directory(full_path, arg_naming_convention);
 			} else if (S_ISREG(statbuf.st_mode)) { 
-				if (naming_match_regex(search_expression, dp->d_name)) {
-					print_search_results(dp, full_path);	
-				}
+				process_current_file(dp, full_path, search_expression);
 			}
 		}
 	}

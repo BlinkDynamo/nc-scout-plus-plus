@@ -1,6 +1,9 @@
 #ifndef NCSCOUT_H
 #define NCSCOUT_H
 
-extern int full_path_flag;
+#include <stdbool.h>
+
+extern bool full_path_flag;
+extern bool matches_flag;
 
 #endif

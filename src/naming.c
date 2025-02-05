@@ -1,6 +1,6 @@
 /*
  * @file	naming.c
- * @author	Josh Hayden	
+ * @author	Josh Hayden
  */
 
 #include <stdio.h>
@@ -16,7 +16,7 @@ bool naming_match_regex(const char *pattern, const char *file_name)
 	int regex_return;
 
 	if (regcomp(&regex, pattern, REG_EXTENDED) != 0) {
-		fprintf(stderr, "Error: Failed to compile regex\n");
+		fprintf(stderr, "Error: Failed to compile regex.\n");
 	}
 
 	regex_return = regexec(&regex, file_name, 0, NULL, 0);
