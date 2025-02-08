@@ -4,6 +4,8 @@
  * @license	GPL-3.0
  */
 
+#define _GNU_SOURCE
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -72,7 +74,7 @@ void search_directory(const char *dir_path, const char *arg_naming_convention)
 		}
 
 		struct stat statbuf;
-		if (stat(full_path, &statbuf) == 0) {
+		if (lstat(full_path, &statbuf) == 0) {
 			if (S_ISDIR(statbuf.st_mode)) {
 				process_current_file(dp, full_path, search_expression);
 				/* Recurse each subdirectory. */
