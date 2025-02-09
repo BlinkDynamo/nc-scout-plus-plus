@@ -1,0 +1,55 @@
+#----------------------------------------#
+# @author       J. Hayden                #
+# @file		tests-dir-structure.txt  # 
+# @license      GPL-3.0                  #
+#----------------------------------------#
+
+# Camelcase test directory structure.
+# 10 correct camelcase files and directories.
+camelCase
+camelCase/camelCaseTest1
+camelCase/camelCaseTest2
+camelCase/camelCaseTest3
+camelCase/camelCaseTest4
+camelCase/camelCaseTest5
+camelCase/camelCaseTest6
+camelCase/camelCaseTest7
+camelCase/camelCaseTest8
+camelCase/camelCaseTest9
+
+# Kebabcase test directory structure.
+# 10 correct kebabcase files and directories.
+kebab-case
+kebab-case/kebab-case-test-01
+kebab-case/kebab-case-test-02
+kebab-case/kebab-case-test-03
+kebab-case/kebab-case-test-04
+kebab-case/kebab-case-test-05
+kebab-case/kebab-case-test-06
+kebab-case/kebab-case-test-07
+kebab-case/kebab-case-test-08
+kebab-case/kebab-case-test-09
+
+# Snakecase test directory structure. 
+# 10 correct snakecase files and directories.
+snake_case
+snake_case/snake_case_test_01
+snake_case/snake_case_test_02
+snake_case/snake_case_test_03
+snake_case/snake_case_test_04
+snake_case/snake_case_test_05
+snake_case/snake_case_test_06
+snake_case/snake_case_test_07
+snake_case/snake_case_test_08
+snake_case/snake_case_test_09
+
+# Non-conforming test directory structure (files that pass no naming convention).
+NONCONFORMING
+NONCONFORMING/nonCONFORMING1
+NONCONFORMING/NoN-CONFORMING_2
+NONCONFORMING/NonConforming3
+NONCONFORMING/NonConforming___4
+NONCONFORMING/non-CONFORMING6
+NONCONFORMING/NONconforming7
+NONCONFORMING/Non-Conforming-8
+NONCONFORMING/non!conforming!9

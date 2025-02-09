@@ -14,6 +14,9 @@ SRCS = src/nc-scout.c src/validate.c src/naming.c src/search.c
 OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o)
 EXEC = build/nc-scout
 
+check: $(TEST_DIR) $(OBJ_DIR) $(EXEC)
+	$(TEST_BUILDSCRIPT) 
+
 all: $(OBJ_DIR) $(EXEC) 
 
 $(EXEC): $(OBJS)
@@ -25,9 +28,6 @@ $(OBJ_DIR)/$(SRC_DIR)/%.o: src/%.c
 clean:
 	rm -rf $(OBJ_DIR) 
 	rm -rf $(TEST_DIR)
-
-check: $(TEST_DIR)
-	cd $(TEST_DIR) && ../$(TEST_BUILDSCRIPT) 
 
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)/$(SRC_DIR)
