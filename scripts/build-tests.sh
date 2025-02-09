@@ -18,7 +18,7 @@ directories=$(grep -v '^#' "$tests_dir_structure_file" | grep -v ' = ')
 
 # Create test directory structure silently.
 for dir in $directories; do
-	mkdir -p "$dir" 2>/dev/null
+	mkdir -p "tests/$dir" 2>/dev/null
 done
 
 # Define colors and test() function.
@@ -31,7 +31,7 @@ function test_matching_for_convention() {
 	local naming_convention="$1"
 	local n_expected_correct="$2"
 
-	n_observed_correct=$(build/nc-scout search -m $naming_convention ./ | wc -l)
+	n_observed_correct=$(build/nc-scout search -m $naming_convention tests/ | wc -l)
 	if [ "$n_observed_correct" == "$n_expected_correct" ]; then
 		printf "[${GREEN}✓${RESET}]"
 	else
