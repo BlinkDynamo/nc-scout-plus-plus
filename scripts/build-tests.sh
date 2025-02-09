@@ -11,7 +11,7 @@ if [ $(basename "$PWD") != "nc-scout" ]; then
 	exit 1
 fi
 
-tests_dir_structure_file="data/tests-dir-structure.txt"
+tests_dir_structure_file="data/tests-dir-structure"
 
 # Extract directory path lines while ignoring comment lines until the end of file.
 directories=$(grep -v '^#' "$tests_dir_structure_file" | grep -v ' = ')
