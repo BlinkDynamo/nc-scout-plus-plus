@@ -1,8 +1,10 @@
-#----------------------------------------#
-# @author       J. Hayden                #
-# @file         tests-dir-structure      #
-# @license      GPL-3.0                  #
-#----------------------------------------#
+#------------------------------------------------------------------------------------#
+#
+# @author       J. Hayden
+# @file         tests-dir-structure
+# @license      GPL-3.0
+#
+#------------------------------------------------------------------------------------#
 
 # Camelcase test directory structure.
 # 10 correct camelcase files and directories.

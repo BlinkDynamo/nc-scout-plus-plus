@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
-#----------------------------------------#
-# @author       J. Hayden                #
-# @file         build-tests.sh           #
-# @license      GPL-3.0                  #
-#----------------------------------------#
+#----------------------------------------------------------------------------------------------#
+#
+# @author      J. Hayden
+# @file        build-tests.sh
+# @license     GPL-3.0
+#
+#----------------------------------------------------------------------------------------------#
 
 # This file should only be executed from the project root (preferably by the Makefile).
 if [ $(basename "$PWD") != "nc-scout" ]; then

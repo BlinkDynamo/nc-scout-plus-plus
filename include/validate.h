@@ -1,8 +1,10 @@
-/*
- * @author	Josh Hayden
- * @file	validate.h
- * @license	GPL-3.0
- */
+/**********************************************************************************************
+ *
+ * @author      Josh Hayden
+ * @file        validate.h
+ * @license     GPL-3.0
+ *
+ *********************************************************************************************/
 
 #ifndef VALIDATION_H
 #define VALIDATION_H

@@ -6,7 +6,6 @@
 #
 #----------------------------------------------------------------------------------------------#
 
-# Compiler specifications.
 CC = gcc
 CFLAGS = -std=c99 -pedantic -Wall -Wextra -Iinclude 
 
