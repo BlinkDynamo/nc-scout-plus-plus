@@ -1,4 +1,4 @@
-![nc-scout](img/nc-scout.png)
+# ![nc-scout](img/nc-scout.png)
 
 ## Index
 * [Description](#description)
@@ -24,8 +24,8 @@ nc-scout [OPTION]? [COMMAND] [CONVENTION] [DIRECTORY]
 |-------------------|------------------------------------------------------------|
 | `-h, --help`      | Show a helpful message.                                    |
 | `-v, --version`   | Show what version of the program you are using.            |
-| `-f, --full-path` | Display matches by their full path name                    |
-| `-m, --matches`   | Print matches instead of non-matches                       |
+| `-f, --full-path` | Display matches by their full path name.                   |
+| `-m, --matches`   | Print matches instead of non-matches.                      |
 
 ### Commands
 |Command            | Description                                                |
@@ -34,11 +34,11 @@ nc-scout [OPTION]? [COMMAND] [CONVENTION] [DIRECTORY]
 
 
 ### Conventions
-Conventions:
-camelcase exampleFileName.txt
-snakecase example_file_name.txt
-kebabcase example-file-name.txt
-
+| Convention        | Example                                                    |
+|-------------------|------------------------------------------------------------|
+| `camelcase`       | exampleFileName.txt                                        |
+| `snakecase`       | example_file_name.txt                                      |
+| `kebabcase`       | example-file-name.txt                                      |
 
 ## Build Instructions
 **To begin, go to the root of the repository:**
