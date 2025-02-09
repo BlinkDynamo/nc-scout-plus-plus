@@ -65,13 +65,18 @@ cd build/
 ./nc-scout --help
 ```
 
-**To install the binary and use it systemwide (currently unimlemented):**
+**To install the binary and use it systemwide:**
 ```bash
-make install
+sudo make install
 nc-scout --help
 ```
 
 **Should you want to clean the build/ and tests/ directories:**
 ```bash
 make clean
+```
+
+**To uninstall the binary:**
+```bash
+sudo make uninstall
 ```

@@ -1,23 +1,43 @@
-# @author	J. Hayden
-# @file		Makefile
-# @license	GPL-3.0
+#----------------------------------------------------------------------------------------------#
+#
+# @author       J. Hayden
+# @file         Makefile
+# @license      GPL-3.0
+#
+#----------------------------------------------------------------------------------------------#
 
+# Compiler specifications.
 CC = gcc
 CFLAGS = -std=c99 -pedantic -Wall -Wextra -Iinclude 
 
+# Installation prefix.
+PREFIX ?= /usr/local
+
+# Important directories.
 OBJ_DIR = build
 SRC_DIR = src
 TEST_DIR = tests
+BIN_DIR = $(PREFIX)/bin
 
-TEST_BUILDSCRIPT = scripts/build-tests.sh
+# Important files.
 SRCS = src/nc-scout.c src/validate.c src/naming.c src/search.c	
 OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o)
 EXEC = build/nc-scout
+TEST_BUILDSCRIPT = scripts/build-tests.sh
+
+# Dependency tree.
+#----------------------------------------------------------------------------------------------#
+all: $(OBJ_DIR) $(EXEC)
 
 check: $(TEST_DIR) $(OBJ_DIR) $(EXEC)
-	$(TEST_BUILDSCRIPT) 
+	$(TEST_BUILDSCRIPT)  
 
-all: $(OBJ_DIR) $(EXEC) 
+install: $(EXEC)
+	install -d $(DESTDIR)$(BIN_DIR)
+	install -m 755 $(EXEC) $(DESTDIR)$(BIN_DIR)
+
+uninstall:
+	rm -f $(DESTDIR)$(BIN_DIR)/$(notdir $(EXEC))
 
 $(EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $(EXEC)
