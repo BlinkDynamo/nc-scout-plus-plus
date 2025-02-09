@@ -1,33 +1,38 @@
-![nc-scout](/img/nc-scout.png)
-### A very minimal naming convention checker.
+![nc-scout](img/nc-scout.png)
 
+## Index
+* [Description](#description)
+* [Dependencies](#dependencies)
+* [Usage](#usage)
+* [Build](#build-instructions)
+* [Installation](#installation)
+
+## Description
+nc-scout is a simple naming convention checker tool. It allows you to search directories for non-matching filenames to a naming convention. It is a personal tool I wanted for system cleanliness that became a larger project. It currently only supports predefined regular expressions as defined [here](src/search.c), although, I have played with the idea of creating a configuration file based approach, where you could create a much more customized search regimen.
 
 ## Dependencies
-make
-POSIX-compliant system (Linux, MacOS)
+* make
+* POSIX-compliant system (Linux, MacOS)
 
 ## Usage
-
-The layout of a nc-scout function call.
+The layout of a nc-scout command.
 
 nc-scout [OPTION]? [COMMAND] [CONVENTION] [DIRECTORY]
-#
-### Options
 
-|||
-|--|--|
-| -h, --help |  Show a help message with more information about the program. |
-| -v, --version | Show what version of the program you are using. |
-| -f, --full-path | Display matches by their full path name |
-| -m, --matches | Print matches instead of non-matches |
-|||
-#
+### Options
+| Flag              | Description                                                |
+|-------------------|------------------------------------------------------------|
+| `-h, --help`      | Show a helpful message.                                    |
+| `-v, --version`   | Show what version of the program you are using.            |
+| `-f, --full-path` | Display matches by their full path name                    |
+| `-m, --matches`   | Print matches instead of non-matches                       |
+
 ### Commands
-|||
-|--|--| 
-| search | Search for matches to a naming convention in a directory |
-|||
-#
+|Command            | Description                                                |
+|-------------------|------------------------------------------------------------| 
+| `search`          | Search for matches to a naming convention in a directory.  |
+
+
 ### Conventions
 Conventions:
 camelcase exampleFileName.txt
@@ -36,33 +41,37 @@ kebabcase example-file-name.txt
 
 
 ## Build Instructions
+**To begin, go to the root of the repository:**
+```bash
+cd nc-scout/
+```
 
-To begin, go to the project root: `nc-scout/`
+**Build the binary:**
+```bash
+make
+``` 
 
-  
-
-Choose one of these build options:
-
-1. Simple build:
-`make`
-
-  
-
-2. Run tests and build:
-`make check`
+**Run tests (optional):**
+```bash
+make check
+```
 
 ## Installation
 If the project built successfully, you can now either use the binary directly from the repository, or install it to your system.
 
-1. Using the binary directly:
-`cd build/`
-`./nc-scout --help`
+**To use the binary directly:**
+```bash
+cd build/
+./nc-scout --help
+```
 
-2. Installing the binary (currently unimplemented):
-`make install`
+**To install the binary and use it systemwide (currently unimlemented):**
+```bash
+make install
+nc-scout --help
+```
 
-## Cleaning
-Should you want to clean the build/ and tests/ directories, run:
-`make clean`
-
-
+**Should you want to clean the build/ and tests/ directories:**
+```bash
+make clean
+```
