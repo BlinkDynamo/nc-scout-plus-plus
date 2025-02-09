@@ -1,6 +1,6 @@
 #----------------------------------------#
 # @author       J. Hayden                #
-# @file		tests-dir-structure.txt  # 
+# @file         tests-dir-structure      #
 # @license      GPL-3.0                  #
 #----------------------------------------#
 
@@ -53,3 +53,4 @@ NONCONFORMING/non-CONFORMING6
 NONCONFORMING/NONconforming7
 NONCONFORMING/Non-Conforming-8
 NONCONFORMING/non!conforming!9
+
