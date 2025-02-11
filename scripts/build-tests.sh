@@ -8,8 +8,8 @@ fi
 
 tests_dir_structure_file="data/tests-dir-structure"
 
-# Extract directory path lines while ignoring comment lines until the end of file.
-directories=$(grep -v '^#' "$tests_dir_structure_file" | grep -v ' = ')
+# Extract directory path lines.
+directories=$(awk 'NF' "$tests_dir_structure_file")
 
 # Create test directory structure silently.
 for dir in $directories; do
@@ -17,7 +17,6 @@ for dir in $directories; do
 done
 
 # Define colors and test() function.
-
 GREEN="\033[0;32m"
 RED="\033[0;31m"
 RESET="\033[0m"
@@ -32,16 +31,17 @@ function test_matching_for_convention() {
     else
         printf "[${RED}X${RESET}]"  
     fi
-    printf " $naming_convention    $n_expected_correct matches expected    $n_observed_correct matches observed\n"
+    # Make the output look pretty and aligned.
+    printf " %-16s | %s | %s\n" "$naming_convention" "matches expected: $n_expected_correct" "matches observed: $n_observed_correct"
 }
 
 # Begin tests.
 printf "\nTest matching for naming conventions...\n\n"
-test_matching_for_convention flatcase 10
-test_matching_for_convention camelcase 10
-test_matching_for_convention pascalcase 10
-test_matching_for_convention snakecase 10
-test_matching_for_convention constantcase 10
-test_matching_for_convention kebabcase 10
-test_matching_for_convention cobolcase 10
+test_matching_for_convention flatcase       10
+test_matching_for_convention camelcase      10
+test_matching_for_convention pascalcase     10
+test_matching_for_convention snakecase      10
+test_matching_for_convention constantcase   10
+test_matching_for_convention kebabcase      10
+test_matching_for_convention cobolcase      10
 
