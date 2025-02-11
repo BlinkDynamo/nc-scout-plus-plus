@@ -36,9 +36,13 @@ nc-scout [OPTION]? [COMMAND] [CONVENTION] [DIRECTORY]
 ### Conventions
 | Convention        | Example                                                    |
 |-------------------|------------------------------------------------------------|
+| `flatcase`        | examplefilename.txt                                        |
 | `camelcase`       | exampleFileName.txt                                        |
+| `pascalcase`      | ExampleFileName.txt                                        |
 | `snakecase`       | example_file_name.txt                                      |
+| `constantcase`    | EXAMPLE_FILE_NAME.txt                                      |
 | `kebabcase`       | example-file-name.txt                                      |
+| `cobolcase`       | EXAMPLE-FILE-NAME.txt                                      |
 
 ## Build Instructions
 **To begin, go to the root of the repository:**

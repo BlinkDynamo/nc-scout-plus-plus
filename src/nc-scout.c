@@ -74,9 +74,13 @@ int subc_exec_help(int argc, char *argv[])
     "  search           Search for filenames that do not match a naming convention in a directory\n"
     "\n"
     "Conventions:\n"
+    "  flatcase         examplefilename.txt\n"
     "  camelcase        exampleFileName.txt\n"
+    "  pascalcase       ExampleFileName.txt\n"
     "  snakecase        example_file_name.txt\n"
+    "  constantcase     EXAMPLE_FILE_NAME.txt\n"
     "  kebabcase        example-file-name.txt\n"
+    "  cobolcase        EXAMPLE-FILE-NAME.txt\n"
     "";
     /* Input must be either nc-scout -h or nc-scout --help exactly to recieve the general nc-scout help. 
      * Otherwise, they likely intend to recieve help regarding a command directly preceding -h or --help. */
