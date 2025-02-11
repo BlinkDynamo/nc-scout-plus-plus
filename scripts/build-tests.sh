@@ -37,7 +37,11 @@ function test_matching_for_convention() {
 
 # Begin tests.
 printf "\nTest matching for naming conventions...\n\n"
+test_matching_for_convention flatcase 10
 test_matching_for_convention camelcase 10
-test_matching_for_convention kebabcase 10
+test_matching_for_convention pascalcase 10
 test_matching_for_convention snakecase 10
+test_matching_for_convention constantcase 10
+test_matching_for_convention kebabcase 10
+test_matching_for_convention cobolcase 10
 

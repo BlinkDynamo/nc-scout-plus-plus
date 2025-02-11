@@ -1,3 +1,14 @@
+flatcase
+flatcase/flatcasetest1
+flatcase/flatcasetest2
+flatcase/flatcasetest3
+flatcase/flatcasetest4
+flatcase/flatcasetest5
+flatcase/flatcasetest6
+flatcase/flatcasetest7
+flatcase/flatcasetest8
+flatcase/flatcasetest9
+
 camelCase
 camelCase/camelCaseTest1
 camelCase/camelCaseTest2
@@ -8,6 +19,17 @@ camelCase/camelCaseTest6
 camelCase/camelCaseTest7
 camelCase/camelCaseTest8
 camelCase/camelCaseTest9
+
+PascalCase
+PascalCase/PascalCaseTest1
+PascalCase/PascalCaseTest2
+PascalCase/PascalCaseTest3
+PascalCase/PascalCaseTest4
+PascalCase/PascalCaseTest5
+PascalCase/PascalCaseTest6
+PascalCase/PascalCaseTest7
+PascalCase/PascalCaseTest8
+PascalCase/PascalCaseTest9
 
 kebab-case
 kebab-case/kebab-case-test-01
@@ -20,6 +42,17 @@ kebab-case/kebab-case-test-07
 kebab-case/kebab-case-test-08
 kebab-case/kebab-case-test-09
 
+COBOL-CASE
+COBOL-CASE/COBOL-CASE-TEST-01
+COBOL-CASE/COBOL-CASE-TEST-02
+COBOL-CASE/COBOL-CASE-TEST-03
+COBOL-CASE/COBOL-CASE-TEST-04
+COBOL-CASE/COBOL-CASE-TEST-05
+COBOL-CASE/COBOL-CASE-TEST-06
+COBOL-CASE/COBOL-CASE-TEST-07
+COBOL-CASE/COBOL-CASE-TEST-08
+COBOL-CASE/COBOL-CASE-TEST-09
+
 snake_case
 snake_case/snake_case_test_01
 snake_case/snake_case_test_02
@@ -31,13 +64,13 @@ snake_case/snake_case_test_07
 snake_case/snake_case_test_08
 snake_case/snake_case_test_09
 
-NONCONFORMING
-NONCONFORMING/nonCONFORMING1
-NONCONFORMING/NoN-CONFORMING_2
-NONCONFORMING/NonConforming3
-NONCONFORMING/NonConforming___4
-NONCONFORMING/non-CONFORMING6
-NONCONFORMING/NONconforming7
-NONCONFORMING/Non-Conforming-8
-NONCONFORMING/non!conforming!9
-
+CONSTANT_CASE
+CONSTANT_CASE/CONSTANT_CASE_TEST_01
+CONSTANT_CASE/CONSTANT_CASE_TEST_02
+CONSTANT_CASE/CONSTANT_CASE_TEST_03
+CONSTANT_CASE/CONSTANT_CASE_TEST_04
+CONSTANT_CASE/CONSTANT_CASE_TEST_05
+CONSTANT_CASE/CONSTANT_CASE_TEST_06
+CONSTANT_CASE/CONSTANT_CASE_TEST_07
+CONSTANT_CASE/CONSTANT_CASE_TEST_08
+CONSTANT_CASE/CONSTANT_CASE_TEST_09
