@@ -63,6 +63,21 @@
 #define EXPR_KEBABCASE      "^\\.?[a-z0-9]+(-[a-z0-9]+)+(\\.[A-Za-z0-9]+)?$"
 #define EXPR_COBOLCASE      "^\\.?[A-Z0-9]+(-[A-Z0-9]+)+(\\.[A-Za-z0-9]+)?$"
 
+typedef struct Convention {
+    char *name;
+    char *regex;
+} Convention;
+
+Convention Conventions[] = {
+    {"flatcase", EXPR_FLATCASE}, 
+    {"camelcase", EXPR_CAMELCASE},
+    {"pascalcase", EXPR_PASCALCASE},
+    {"snakecase", EXPR_SNAKECASE},
+    {"constantcase", EXPR_CONSTANTCASE},
+    {"kebabcase", EXPR_KEBABCASE},
+    {"cobolcase", EXPR_COBOLCASE},
+};
+
 /* Prints a d_name formatted according to full_path_flag. Depends on full_path_flag to be accessible. */
 void print_filename(struct dirent *dp, char full_path[PATH_MAX])
 {
@@ -97,13 +112,11 @@ void search_directory(const char *dir_path, const char *arg_naming_convention)
 
     struct dirent *dp;
     char *search_expression;
-    if (strcmp("flatcase", arg_naming_convention) == 0)             search_expression = EXPR_FLATCASE;
-    else if (strcmp("camelcase", arg_naming_convention) == 0)       search_expression = EXPR_CAMELCASE;
-    else if (strcmp("pascalcase", arg_naming_convention) == 0)      search_expression = EXPR_PASCALCASE;
-    else if (strcmp("snakecase", arg_naming_convention) == 0)       search_expression = EXPR_SNAKECASE;
-    else if (strcmp("constantcase", arg_naming_convention) == 0)    search_expression = EXPR_CONSTANTCASE;
-    else if (strcmp("kebabcase", arg_naming_convention) == 0)       search_expression = EXPR_KEBABCASE;
-    else if (strcmp("cobolcase", arg_naming_convention) == 0)       search_expression = EXPR_COBOLCASE;
+    
+    for (long unsigned int i = 0; i < (sizeof(Conventions) / sizeof(Convention)); i++) {
+        if (strcmp(arg_naming_convention, Conventions[i].name) == 0)
+            search_expression = Conventions[i].regex;
+    }
 
     while ((dp = readdir(dir)) != NULL) {
         /* Skip current and parent entries. */
