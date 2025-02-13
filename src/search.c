@@ -43,65 +43,25 @@
 #include "nc-scout.h"
 
 /*
- * Each search expression is made up of at least 3 and at most 5 sections:
- *
- *   1. START_OF_STRING: Mandatory. Keeps a critical part of the regular expression separate.
+ * Each regular expression is made up of three sections:
  *  
- *   2. EXPR_BEGIN_DOTFILE: On by default. A non-capturing group at the beginning to allow for dotfiles (ie .local/):
- *          
- *          ^\\.?
+ *   1. A non-capturing group at the beginning to allow for dotfiles (ie .local/):
+ *      ^\\.?
  *
- *   3. EXPR_BODY_: Mandatory. A middle body that enforces the required naming convention:
- *          
- *          [a-z0-9]+   'flatcase' in this example.
+ *   2. A middle body that enforces the required naming convention:
+ *      [a-z0-9]+   'flatcase' in this example.
  *
- *   4. EXPR_END_EXTENTION: On by default. A non-capturing group at the end that allows for the file extention (ie .txt):
- *          
- *          (\\.[a-z0-9]+?)
- *   
- *   5. END_OF_STRING: Mandatory. Keeps a critical part of the regular expression separate.
+ *   3. A non-capturing group at the end that allows for the file extention (ie foo.txt):
+ *      (\\.[A-Za-z0-9]+?)
+ *
  */
-#define START_OF_STRING         "^"
-
-#define EXPR_BEGIN_DOTFILE      "\\.?"
-
-#define EXPR_BODY_FLATCASE       "[a-z0-9]+"
-#define EXPR_BODY_CAMELCASE      "^([a-z]+)([A-Z][a-z0-9]+)+"
-#define EXPR_BODY_PASCALCASE     "^([A-Z][a-z0-9]+)+"
-#define EXPR_BODY_SNAKECASE      "^[a-z0-9]+(_[a-z0-9]+)+"
-#define EXPR_BODY_CONSTANTCASE   "^[A-Z0-9]+(_[A-Z0-9]+)+"
-#define EXPR_BODY_KEBABCASE      "^[a-z0-8]+(-[a-z0-9]+)+"
-#define EXPR_BODY_COBOLCASE      "^[A-Z0-9]+(-[A-Z0-9]+)+"
-
-#define EXPR_END_EXTENTION      "(\\.[A-Z0-9]+)?"
-
-#define END_OF_STRING           "$"
-
-/*
- * Compiles a regular expression given a naming convention. Returns a dynamically allocated string of
- * combined regular expressions.
- */
-char *compile_search_expression(const char *arg_naming_convention)
-{
-    char *search_expr_body;
-    
-    if (strcmp("flatcase", arg_naming_convention) == 0)             search_expr_body = EXPR_BODY_FLATCASE;
-    else if (strcmp("camelcase", arg_naming_convention) == 0)       search_expr_body = EXPR_BODY_CAMELCASE;
-    else if (strcmp("pascalcase", arg_naming_convention) == 0)      search_expr_body = EXPR_BODY_PASCALCASE;
-    else if (strcmp("snakecase", arg_naming_convention) == 0)       search_expr_body = EXPR_BODY_SNAKECASE;
-    else if (strcmp("constantcase", arg_naming_convention) == 0)    search_expr_body = EXPR_BODY_CONSTANTCASE;
-    else if (strcmp("kebabcase", arg_naming_convention) == 0)       search_expr_body = EXPR_BODY_KEBABCASE;
-    else if (strcmp("cobolcase", arg_naming_convention) == 0)       search_expr_body = EXPR_BODY_COBOLCASE;
-
-    size_t total_length = strlen(START_OF_STRING) + strlen(EXPR_BEGIN_DOTFILE) + strlen(search_expr_body) + strlen(EXPR_END_EXTENTION) + strlen(END_OF_STRING);
-    char *search_expr_final = (char *)malloc(total_length); 
-
-    snprintf(search_expr_final, total_length, "%s%s%s%s%s", START_OF_STRING, EXPR_BEGIN_DOTFILE, search_expr_body, EXPR_END_EXTENTION, END_OF_STRING);
-    
-    /* Returns a pointer to allocated memory! */
-    return search_expr_final;
-} 
-
+#define EXPR_FLATCASE       "^\\.?[a-z0-9]+(\\.[A-Za-z0-9]+)?$"
+#define EXPR_CAMELCASE      "^\\.?[a-z]+([A-Z][a-z0-9]+)+(\\.[A-Za-z0-9]+)?$"
+#define EXPR_PASCALCASE     "^\\.?([A-Z][a-z0-9]+)+(\\.[A-Za-z0-9]+)?$"
+#define EXPR_SNAKECASE      "^\\.?[a-z0-9]+(_[a-z0-9]+)+(\\.[A-Za-z0-9]+)?$"
+#define EXPR_CONSTANTCASE   "^\\.?[A-Z0-9]+(_[A-Z0-9]+)+(\\.[A-Za-z0-9]+)?$"
+#define EXPR_KEBABCASE      "^\\.?[a-z0-9]+(-[a-z0-9]+)+(\\.[A-Za-z0-9]+)?$"
+#define EXPR_COBOLCASE      "^\\.?[A-Z0-9]+(-[A-Z0-9]+)+(\\.[A-Za-z0-9]+)?$"
 
 /* Prints a d_name formatted according to full_path_flag. Depends on full_path_flag to be accessible. */
 void print_filename(struct dirent *dp, char full_path[PATH_MAX])
@@ -125,7 +85,7 @@ void process_current_file(struct dirent *dp, char full_path[PATH_MAX], char *sea
             print_filename(dp, full_path);
     }   
 }
-    
+
 /* 
  * Moves recursively down dir_path, looking for files and directories that match or do not match the naming 
  * convention `arg_naming_convention`, depending on the state of matches_flag.
@@ -136,7 +96,14 @@ void search_directory(const char *dir_path, const char *arg_naming_convention)
     DIR *dir = opendir(dir_path);
 
     struct dirent *dp;
-    char *search_expression = compile_search_expression(arg_naming_convention);  
+    char *search_expression;
+    if (strcmp("flatcase", arg_naming_convention) == 0)             search_expression = EXPR_FLATCASE;
+    else if (strcmp("camelcase", arg_naming_convention) == 0)       search_expression = EXPR_CAMELCASE;
+    else if (strcmp("pascalcase", arg_naming_convention) == 0)      search_expression = EXPR_PASCALCASE;
+    else if (strcmp("snakecase", arg_naming_convention) == 0)       search_expression = EXPR_SNAKECASE;
+    else if (strcmp("constantcase", arg_naming_convention) == 0)    search_expression = EXPR_CONSTANTCASE;
+    else if (strcmp("kebabcase", arg_naming_convention) == 0)       search_expression = EXPR_KEBABCASE;
+    else if (strcmp("cobolcase", arg_naming_convention) == 0)       search_expression = EXPR_COBOLCASE;
 
     while ((dp = readdir(dir)) != NULL) {
         /* Skip current and parent entries. */
@@ -162,5 +129,4 @@ void search_directory(const char *dir_path, const char *arg_naming_convention)
         }
     }
     closedir(dir);
-    free(search_expression);
 }
