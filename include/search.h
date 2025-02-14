@@ -30,6 +30,8 @@
 #ifndef SEARCH_H
 #define SEARCH_H
 
-void search_directory(const char *dir_path, char *search_expression);
+#include <regex.h>
+
+void search_directory(const char *dir_path, regex_t regex);
 
 #endif

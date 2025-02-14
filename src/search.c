@@ -53,14 +53,14 @@ void print_filename(struct dirent *dp, char full_path[PATH_MAX])
 }
 
 /* Compares a d_name to a regular expression. Depends on matches_flag to be accessible. */
-void process_current_file(struct dirent *dp, char full_path[PATH_MAX], char *search_expression)
+void process_current_file(struct dirent *dp, char full_path[PATH_MAX], regex_t regex)
 {
     if (matches_flag == true) {
-        if (naming_match_regex(search_expression, dp->d_name))
+        if (naming_match_regex(regex, dp->d_name))
             print_filename(dp, full_path);
     } 
     else if (matches_flag == false) {
-        if (!naming_match_regex(search_expression, dp->d_name))
+        if (!naming_match_regex(regex, dp->d_name))
             print_filename(dp, full_path);
     }   
 }
@@ -69,7 +69,7 @@ void process_current_file(struct dirent *dp, char full_path[PATH_MAX], char *sea
  * Moves recursively down dir_path, looking for files and directories that match or do not match the regular expression
  * 'search_expression', depending on the state of matches_flag.
  */
-void search_directory(const char *dir_path, char *search_expression)
+void search_directory(const char *dir_path, regex_t regex)
 {
     /* dir_path is known to be valid at this point. */
     DIR *dir = opendir(dir_path);
@@ -91,11 +91,11 @@ void search_directory(const char *dir_path, char *search_expression)
         struct stat statbuf;
         if (lstat(full_path, &statbuf) == 0) {
             if (S_ISDIR(statbuf.st_mode)) {
-                process_current_file(dp, full_path, search_expression);
+                process_current_file(dp, full_path, regex);
                 /* Recurse each subdirectory. */
-                search_directory(full_path, search_expression);
+                search_directory(full_path, regex);
             } else if (S_ISREG(statbuf.st_mode)) { 
-                process_current_file(dp, full_path, search_expression);
+                process_current_file(dp, full_path, regex);
             }
         }
     }

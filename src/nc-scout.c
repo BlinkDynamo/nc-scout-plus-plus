@@ -31,6 +31,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <getopt.h>
+#include <regex.h>
 
 #include "nc-scout.h"
 #include "validate.h"
@@ -52,11 +53,15 @@ int subc_exec_search(int argc, char *argv[])
     const char *arg_target_dirname = argv[2]; 
    
     /* Set by naming_match_expression to the matching Conventions[i].regex if arg_naming_convention is valid, otherwise it remains NULL. */
-    char *search_expression = NULL;
+    char *search_expression;
+    /* Set by naming_compile_regex() after search_expression is known to be set. */ 
+    regex_t search_regex;
 
     if ((validate_target_dirname_exists(arg_target_dirname)) &&
-        (naming_set_expression(arg_naming_convention, &search_expression))) {
-        search_directory(arg_target_dirname, search_expression);
+        (naming_set_expression(arg_naming_convention, &search_expression)) &&
+        (naming_compile_regex(&search_regex, search_expression))) {
+        
+        search_directory(arg_target_dirname, search_regex);
         return EXIT_SUCCESS;
     }
     return EXIT_FAILURE;

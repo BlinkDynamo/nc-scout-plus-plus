@@ -31,14 +31,17 @@
 #define NAMING_H
 
 #include <stdbool.h>
+#include <regex.h>
 
 struct Convention {
     char *name;
     char *regex;
 };
 
-bool naming_match_regex(const char *pattern, const char *file_name);
-
 bool naming_set_expression(const char *arg_naming_convention, char **ptr_search_expression);
+
+bool naming_compile_regex(regex_t *regex, char *search_expression);
+
+bool naming_match_regex(regex_t regex, const char *filename);
 
 #endif
