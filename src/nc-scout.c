@@ -50,10 +50,13 @@ int subc_exec_search(int argc, char *argv[])
 {
     const char *arg_naming_convention = argv[1];
     const char *arg_target_dirname = argv[2]; 
+   
+    /* Set by naming_match_expression to the matching Conventions[i].regex if arg_naming_convention is valid, otherwise it remains NULL. */
+    char *search_expression = NULL;
 
     if ((validate_target_dirname_exists(arg_target_dirname)) &&
-       (validate_arg_naming_convention(arg_naming_convention))) {
-        search_directory(arg_target_dirname, arg_naming_convention);
+        (naming_set_expression(arg_naming_convention, &search_expression))) {
+        search_directory(arg_target_dirname, search_expression);
         return EXIT_SUCCESS;
     }
     return EXIT_FAILURE;

@@ -32,6 +32,13 @@
 
 #include <stdbool.h>
 
+struct Convention {
+    char *name;
+    char *regex;
+};
+
 bool naming_match_regex(const char *pattern, const char *file_name);
+
+bool naming_set_expression(const char *arg_naming_convention, char **ptr_search_expression);
 
 #endif

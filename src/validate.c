@@ -41,21 +41,3 @@ bool validate_target_dirname_exists(const char *target_dirname)
     }
     return true;
 }
-
-bool validate_arg_naming_convention(const char *arg_naming_convention)
-{
-    if (
-    (strcmp("flatcase", arg_naming_convention) == 0) ||
-    (strcmp("camelcase", arg_naming_convention) == 0) ||
-    (strcmp("pascalcase", arg_naming_convention) == 0) ||
-    (strcmp("snakecase", arg_naming_convention) == 0) ||
-    (strcmp("kebabcase", arg_naming_convention) == 0) ||
-    (strcmp("constantcase", arg_naming_convention) == 0) ||
-    (strcmp("cobolcase", arg_naming_convention) == 0)
-    )
-        return true;
-    else {
-        fprintf(stderr, "Error: '%s' is not a valid naming convention\n", arg_naming_convention);
-        return false;
-    }
-}

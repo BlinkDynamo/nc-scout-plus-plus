@@ -42,42 +42,6 @@
 #include "search.h"
 #include "nc-scout.h"
 
-/*
- * Each regular expression is made up of three sections:
- *  
- *   1. A non-capturing group at the beginning to allow for dotfiles (ie .local/):
- *      ^\\.?
- *
- *   2. A middle body that enforces the required naming convention:
- *      [a-z0-9]+   'flatcase' in this example.
- *
- *   3. A non-capturing group at the end that allows for the file extention (ie foo.txt):
- *      (\\.[A-Za-z0-9]+?)
- *
- */
-#define EXPR_FLATCASE       "^\\.?[a-z0-9]+(\\.[A-Za-z0-9]+)?$"
-#define EXPR_CAMELCASE      "^\\.?[a-z]+([A-Z][a-z0-9]+)+(\\.[A-Za-z0-9]+)?$"
-#define EXPR_PASCALCASE     "^\\.?([A-Z][a-z0-9]+)+(\\.[A-Za-z0-9]+)?$"
-#define EXPR_SNAKECASE      "^\\.?[a-z0-9]+(_[a-z0-9]+)+(\\.[A-Za-z0-9]+)?$"
-#define EXPR_CONSTANTCASE   "^\\.?[A-Z0-9]+(_[A-Z0-9]+)+(\\.[A-Za-z0-9]+)?$"
-#define EXPR_KEBABCASE      "^\\.?[a-z0-9]+(-[a-z0-9]+)+(\\.[A-Za-z0-9]+)?$"
-#define EXPR_COBOLCASE      "^\\.?[A-Z0-9]+(-[A-Z0-9]+)+(\\.[A-Za-z0-9]+)?$"
-
-typedef struct Convention {
-    char *name;
-    char *regex;
-} Convention;
-
-Convention Conventions[] = {
-    {"flatcase", EXPR_FLATCASE}, 
-    {"camelcase", EXPR_CAMELCASE},
-    {"pascalcase", EXPR_PASCALCASE},
-    {"snakecase", EXPR_SNAKECASE},
-    {"constantcase", EXPR_CONSTANTCASE},
-    {"kebabcase", EXPR_KEBABCASE},
-    {"cobolcase", EXPR_COBOLCASE},
-};
-
 /* Prints a d_name formatted according to full_path_flag. Depends on full_path_flag to be accessible. */
 void print_filename(struct dirent *dp, char full_path[PATH_MAX])
 {
@@ -102,21 +66,15 @@ void process_current_file(struct dirent *dp, char full_path[PATH_MAX], char *sea
 }
 
 /* 
- * Moves recursively down dir_path, looking for files and directories that match or do not match the naming 
- * convention `arg_naming_convention`, depending on the state of matches_flag.
+ * Moves recursively down dir_path, looking for files and directories that match or do not match the regular expression
+ * 'search_expression', depending on the state of matches_flag.
  */
-void search_directory(const char *dir_path, const char *arg_naming_convention)
+void search_directory(const char *dir_path, char *search_expression)
 {
     /* dir_path is known to be valid at this point. */
     DIR *dir = opendir(dir_path);
 
     struct dirent *dp;
-    char *search_expression;
-    
-    for (long unsigned int i = 0; i < (sizeof(Conventions) / sizeof(Convention)); i++) {
-        if (strcmp(arg_naming_convention, Conventions[i].name) == 0)
-            search_expression = Conventions[i].regex;
-    }
 
     while ((dp = readdir(dir)) != NULL) {
         /* Skip current and parent entries. */
@@ -135,7 +93,7 @@ void search_directory(const char *dir_path, const char *arg_naming_convention)
             if (S_ISDIR(statbuf.st_mode)) {
                 process_current_file(dp, full_path, search_expression);
                 /* Recurse each subdirectory. */
-                search_directory(full_path, arg_naming_convention);
+                search_directory(full_path, search_expression);
             } else if (S_ISREG(statbuf.st_mode)) { 
                 process_current_file(dp, full_path, search_expression);
             }
