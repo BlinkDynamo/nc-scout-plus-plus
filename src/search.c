@@ -34,6 +34,7 @@
 #include <string.h>
 #include <dirent.h>
 #include <unistd.h>
+#include <errno.h>
 #include <sys/stat.h>
 #include <linux/limits.h>
 
@@ -71,9 +72,15 @@ void process_current_file(struct dirent *dp, char full_path[PATH_MAX], regex_t r
  */
 void search_directory(const char *dir_path, regex_t regex)
 {
-    /* dir_path is known to be valid at this point. */
+    /* dir_path is known to exist at this point, but opendir() can still fail. */
     DIR *dir = opendir(dir_path);
-
+    if (dir == NULL) {
+        printf("Error: cannot access %s due to Error %d (%s).\n", 
+                dir_path,
+                errno,  
+                strerror(errno));
+        return; 
+    }
     struct dirent *dp;
 
     while ((dp = readdir(dir)) != NULL) {
