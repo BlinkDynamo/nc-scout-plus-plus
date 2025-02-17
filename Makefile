@@ -1,5 +1,6 @@
+#-Variables------------------------------------------------------------------------------------#
 CC = gcc
-CFLAGS = -std=c99 -pedantic -Wall -Wextra -Iinclude 
+CFLAGS = -std=c99 -pedantic -Wall -Wextra -Iinclude -g
 
 # Installation prefix.
 PREFIX ?= /usr/local
@@ -16,8 +17,7 @@ OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o)
 EXEC = build/nc-scout
 TEST_BUILDSCRIPT = scripts/build-tests.sh
 
-# Dependency tree.
-#----------------------------------------------------------------------------------------------#
+#-Dependency Tree------------------------------------------------------------------------------#
 all: $(OBJ_DIR) $(EXEC)
 
 check: $(TEST_DIR) $(OBJ_DIR) $(EXEC)
