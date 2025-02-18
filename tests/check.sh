@@ -17,7 +17,7 @@ GREEN="\033[0;32m"
 RED="\033[0;31m"
 RESET="\033[0m"
 
-tests_dir_structure_file="data/tests-dir-structure"
+tests_dir_structure_file="tests/data/tests-dir-structure"
 
 # Extract directory path lines.
 directories=$(awk 'NF' "$tests_dir_structure_file")
