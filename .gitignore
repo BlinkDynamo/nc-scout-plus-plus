@@ -1,6 +1,5 @@
 # Directories created by the Makefile 
 /build
-/tests
 
 # Swap files
 *.swp

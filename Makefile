@@ -6,22 +6,26 @@ CFLAGS = -std=c99 -pedantic -Wall -Wextra -Iinclude -g
 PREFIX ?= /usr/local
 
 # Important directories.
-OBJ_DIR = build
+BUILD_DIR = build
+TESTS_DIR = $(BUILD_DIR)/tests
 SRC_DIR = src
-TEST_DIR = tests
 BIN_DIR = $(PREFIX)/bin
 
 # Important files.
 SRCS = src/nc-scout.c src/validate.c src/naming.c src/search.c	
-OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o)
+OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)
 EXEC = build/nc-scout
-TEST_BUILDSCRIPT = scripts/build-tests.sh
+TEST_BUILDSCRIPT = tests/check.sh
+
+# Exports.
+export BUILD_DIR := $(BUILD_DIR)
+export TESTS_DIR := $(TESTS_DIR)
 
 #-Dependency Tree------------------------------------------------------------------------------#
-all: $(OBJ_DIR) $(EXEC)
+all: $(BUILD_DIR) $(EXEC)
 
-check: $(TEST_DIR) $(OBJ_DIR) $(EXEC)
-	$(TEST_BUILDSCRIPT)  
+check: $(BUILD_DIR) $(TESTS_DIR) $(EXEC)
+	$(TEST_BUILDSCRIPT)
 
 install: $(EXEC)
 	install -d $(DESTDIR)$(BIN_DIR)
@@ -33,15 +37,15 @@ uninstall:
 $(EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $(EXEC)
 
-$(OBJ_DIR)/$(SRC_DIR)/%.o: src/%.c
+$(BUILD_DIR)/$(SRC_DIR)/%.o: src/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -rf $(OBJ_DIR) 
-	rm -rf $(TEST_DIR)
+	rm -rf $(BUILD_DIR) 
+	rm -rf $(TESTS_DIR)
 
-$(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)/$(SRC_DIR)
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)/$(SRC_DIR)
 
-$(TEST_DIR):
-	mkdir -p $(TEST_DIR)
+$(TESTS_DIR):
+	mkdir -p $(TESTS_DIR)
