@@ -1,4 +1,6 @@
-#-Variables------------------------------------------------------------------------------------#
+#----------------------------------------------------------------------------------------------#
+# Variables
+#----------------------------------------------------------------------------------------------#
 CC = gcc
 CFLAGS = -std=c99 -pedantic -Wall -Wextra -Iinclude -g
 
@@ -15,17 +17,21 @@ BIN_DIR = $(PREFIX)/bin
 SRCS = src/nc-scout.c src/validate.c src/naming.c src/search.c	
 OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)
 EXEC = build/nc-scout
-TEST_BUILDSCRIPT = tests/check.sh
+TESTS_EXEC_BUILD = tests/build.sh
+TESTS_EXEC_CHECK = tests/check.sh
 
 # Exports.
 export BUILD_DIR := $(BUILD_DIR)
 export TESTS_DIR := $(TESTS_DIR)
 
-#-Dependency Tree------------------------------------------------------------------------------#
+#----------------------------------------------------------------------------------------------#
+# Dependency Tree 
+#----------------------------------------------------------------------------------------------#
 all: $(BUILD_DIR) $(EXEC)
 
 check: $(BUILD_DIR) $(TESTS_DIR) $(EXEC)
-	$(TEST_BUILDSCRIPT)
+	$(TESTS_EXEC_BUILD)	
+	$(TESTS_EXEC_CHECK)
 
 install: $(EXEC)
 	install -d $(DESTDIR)$(BIN_DIR)
