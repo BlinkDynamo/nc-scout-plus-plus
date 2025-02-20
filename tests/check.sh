@@ -17,20 +17,30 @@ GREEN="\033[0;32m"
 RED="\033[0;31m"
 RESET="\033[0m"
 
+# Counters incremented by test functions.
+tests_passed=0
+tests_executed=0
+
 function test_matching_for_convention() {
-    local naming_convention="$1"
+    local convention="$1"
     local n_expected_correct="$2"
 
-    # Search inside the test directory of a naming convention, ignoring the name of the test directory itself.
-    n_observed_correct=$(${BUILD_DIR}/nc-scout search -m ${naming_convention} ${TESTS_DIR}/${naming_convention} | wc -l)
-    if [ "$n_observed_correct" == "$n_expected_correct" ]; then
+    (( tests_executed++ ))
+
+    # Search inside the test directory of a naming convention, ignoring the name of the test 
+    # directory itself.
+    n_observed_correct=$( \
+        ${BUILD_DIR}/nc-scout search -m ${convention} ${TESTS_DIR}/${convention} | wc -l )
+    
+    if [ "$n_observed_correct" -eq "$n_expected_correct" ]; then
         printf "[${GREEN}✓${RESET}]"
+        (( tests_passed++ ))
     else
         printf "[${RED}X${RESET}]"  
     fi
     # Make the output look pretty and aligned.
     printf " %-16s | %s | %s\n" \
-           "$naming_convention" \
+           "$convention" \
            "matches expected: $n_expected_correct" \
            "matches observed: $n_observed_correct" 
 }
@@ -38,7 +48,7 @@ function test_matching_for_convention() {
 #----------------------------------------------------------------------------------------------#
 # Test Execution
 #----------------------------------------------------------------------------------------------#
-printf "\nTest matching for naming conventions...\n\n"
+printf "\nTesting matching for naming conventions...\n\n"
 
 test_matching_for_convention flatcase       10
 test_matching_for_convention camelcase      10
@@ -47,3 +57,5 @@ test_matching_for_convention snakecase      10
 test_matching_for_convention constantcase   10
 test_matching_for_convention kebabcase      10
 test_matching_for_convention cobolcase      10
+
+printf "\nTesting completed. %s/%s tests were successful.\n\n" "$tests_passed" "$tests_executed"

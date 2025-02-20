@@ -13,17 +13,13 @@ fi
 #----------------------------------------------------------------------------------------------#
 # Definitions 
 #----------------------------------------------------------------------------------------------#
-
-
-# Arguments: directory_name: The name of the directory that will be created.
-#            test_filenames_file: The file of filenames in /tests/data that should be read.
 build_test_directory() {
-    directory_name="$1"
-    test_filenames_file="$2"
+    directory_name="$1"         # The name of the directory that will be created.
+    test_filenames_file="$2"    # The file of filenames in /tests/data that should be read.
 
     mkdir -p "${TESTS_DIR}/${directory_name}"
 
-    # Indirect expansion to access array elements.
+    # Read the filenames from test_filenames_file into an array of strings.
     mapfile -t test_filenames_array < "${test_filenames_file}"
     
     for file in "${test_filenames_array[@]}"; do
@@ -49,4 +45,4 @@ build_test_directory "cobolcase" "tests/data/cobolcase-filenames"
 build_test_directory "snakecase" "tests/data/snakecase-filenames"
 build_test_directory "constantcase" "tests/data/constantcase-filenames"
 
-printf "\n"
+printf "\nTest directories built successfully.\n\n"
