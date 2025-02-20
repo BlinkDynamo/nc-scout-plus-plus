@@ -13,16 +13,40 @@ fi
 #----------------------------------------------------------------------------------------------#
 # Definitions 
 #----------------------------------------------------------------------------------------------#
-tests_dir_structure_file="tests/data/directories"
 
-# Extract directory path lines ignoring empty lines.
-directories=$(awk 'NF' "$tests_dir_structure_file")
+
+# Arguments: directory_name: The name of the directory that will be created.
+#            test_filenames_file: The file of filenames in /tests/data that should be read.
+build_test_directory() {
+    directory_name="$1"
+    test_filenames_file="$2"
+
+    mkdir -p "${TESTS_DIR}/${directory_name}"
+
+    # Indirect expansion to access array elements.
+    mapfile -t test_filenames_array < "${test_filenames_file}"
+    
+    for file in "${test_filenames_array[@]}"; do
+       touch "${TESTS_DIR}/${directory_name}/${file}" 
+    done
+
+    printf "Built test directory '%s' from data file '%s'.\n" \
+           "${directory_name}" \
+           "${test_filenames_file}"
+}
 
 #----------------------------------------------------------------------------------------------#
 # Build
 #----------------------------------------------------------------------------------------------#
+printf "\nBuilding test directories...\n\n"
 
 # Create test directory structure silently.
-for dir in $directories; do
-    mkdir -p "${TESTS_DIR}/${dir}" 2>/dev/null
-done
+build_test_directory "flatcase" "tests/data/flatcase-filenames"
+build_test_directory "camelcase" "tests/data/camelcase-filenames"
+build_test_directory "pascalcase" "tests/data/pascalcase-filenames"
+build_test_directory "kebabcase" "tests/data/kebabcase-filenames"
+build_test_directory "cobolcase" "tests/data/cobolcase-filenames"
+build_test_directory "snakecase" "tests/data/snakecase-filenames"
+build_test_directory "constantcase" "tests/data/constantcase-filenames"
+
+printf "\n"

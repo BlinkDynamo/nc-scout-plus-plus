@@ -21,7 +21,8 @@ function test_matching_for_convention() {
     local naming_convention="$1"
     local n_expected_correct="$2"
 
-    n_observed_correct=$(${BUILD_DIR}/nc-scout search -m ${naming_convention} ${TESTS_DIR} | wc -l)
+    # Search inside the test directory of a naming convention, ignoring the name of the test directory itself.
+    n_observed_correct=$(${BUILD_DIR}/nc-scout search -m ${naming_convention} ${TESTS_DIR}/${naming_convention} | wc -l)
     if [ "$n_observed_correct" == "$n_expected_correct" ]; then
         printf "[${GREEN}✓${RESET}]"
     else
