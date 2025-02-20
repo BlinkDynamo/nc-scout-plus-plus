@@ -49,6 +49,7 @@ bool matches_flag = false;
  */
 int subc_exec_search(int argc, char *argv[])
 {
+    (void)argc; /* Suppress unused argument warning. */
     const char *arg_naming_convention = argv[1];
     const char *arg_target_dirname = argv[2]; 
    
@@ -67,7 +68,7 @@ int subc_exec_search(int argc, char *argv[])
     return EXIT_FAILURE;
 }
 
-int subc_exec_help(int argc, char *argv[])
+int subc_exec_help(int argc)
 {
     char *message = 
     "Usage: nc-scout [OPTION]? [COMMAND] [CONVENTION] [DIRECTORY]\n"
@@ -101,7 +102,7 @@ int subc_exec_help(int argc, char *argv[])
     }
 }
 
-int subc_exec_version(int argc, char *argv[])
+int subc_exec_version(int argc)
 {   
     /* Input must be either nc-scout -v or nc-scout --version exactly. */
     if (argc == 2) {
@@ -139,10 +140,10 @@ int main(int argc, char *argv[])
             return EXIT_FAILURE;
 
         case 'v':
-            return subc_exec_version(argc, argv);
+            return subc_exec_version(argc);
 
         case 'h':
-            return subc_exec_help(argc, argv);
+            return subc_exec_help(argc);
         /* These options set flags */
         case 'f':
             full_path_flag = true;
