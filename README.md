@@ -28,9 +28,9 @@ nc-scout [OPTION]? [COMMAND] [CONVENTION] [DIRECTORY]
 | `-m, --matches`   | Print matches instead of non-matches.                      |
 
 ### Commands
-|Command            | Description                                                |
-|-------------------|------------------------------------------------------------| 
-| `search`          | Search for matches to a naming convention in a directory.  |
+|Command   | Description                                                                         |
+|----------|-------------------------------------------------------------------------------------| 
+| `search` | Search a directory for files with a filename body that matches a naming convention. |
 
 
 ### Conventions
@@ -44,23 +44,38 @@ nc-scout [OPTION]? [COMMAND] [CONVENTION] [DIRECTORY]
 | `kebabcase`       | example-file-name.txt                                      |
 | `cobolcase`       | EXAMPLE-FILE-NAME.txt                                      |
 
+### What is the Filename Body of a Filename?
+The **filename body** is the text of a file's full filename, ignoring leading periods and file extentions. The final period itself and the text that follows it is what is defined as the file extention. `search` is only performed on the filename body of a filename.
+
+```bash
+# Matches: 
+nc-scout search snakecase --matches ./
+.example_file           # The leading period is ignored, resulting in the filename body 'example_file', which is snakecase.
+example_file.txt        # The file extention '.txt' is ignored, resulting in the filename body 'example_file', which is snakecase.
+.example_file.RAR       # The file extention '.RAR' is ignored, resulting in the filename body 'example_file', which is snakecase.
+
+# Non-matches: 
+nc-scout search flatcase ./
+..example_file          # The leading period is ignored, resulting in the filename body '.example', which is not snakecase.
+example_file.exe.txt    # The file extention '.txt' is ignored, resulting in the filename body 'example_file.exe', which is not snakecase.
+
+```
+
 ### Strict vs. Lenient:
 The default enforcement of naming conventions for a search is lenient, although, using
 the `-s` or `--strict` option, you can strictly enforce the naming convention for that search.
 
-Strict enforcement means that the naming convention **must** be present in it's entirety, while
-lenient enforcement means that the naming convention **could** be present in it's entirety if more
-text is added, but not removed or changed.
+Strict enforcement means that the naming convention **must** be present in it's entirety in the filename body, while lenient enforcement means that the naming convention **could** be present in it's entirety in the filename body if more text is added, but not removed or changed.
 
-Example: **example.txt**
+Example File: **example.txt** <em>(filename body is 'example')</em>
 
 Matches strictly:
-* flatcase - Every letter of <strong>example.txt</strong> is lowercase, so it exactly matches the convention.  
+* **flatcase** - The filename body <em>'example'</em> is all lowercase, so it exactly matches the convention.
 
 Matches leniently:
-* kebabcase - Could be extended to <strong>example<span style="color: green;">-file</span>.txt</strong> to match the convention in it's entirety
-* snakecase - Could be extended to <strong>example<span style="color: green;">_file</span>.txt</strong> to match the convention in it's entirety
-* camelcase - Could be extended to <strong>example<span style="color: green;">File</span>.txt</strong> to match the convention in it's entirety
+* **kebabcase** - The filename body <em>'example'</em> could be extended to <em>'example-file'</em> to match the convention in its entirety
+* **snakecase** - The filename body <em>'example'</em> could be extended to <em>'example_file' to match the convention in its entirety
+* **camelcase** - The filename body <em>'example'</em> could be extended to <em>'exampleFile' to match the convention in its entirety
 
 ## Build Instructions
 To begin, clone the project and go to the root of the repository:
