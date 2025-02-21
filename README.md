@@ -8,7 +8,7 @@
 * [Installation](#installation)
 
 ## Description
-nc-scout is a simple naming convention checker tool. It allows you to search directories for non-matching filenames to a naming convention. It is a personal tool I wanted for system cleanliness that became a larger project. It currently only supports predefined regular expressions as defined [here](src/search.c), although, I have played with the idea of creating a configuration file based approach, where you could create a much more customized search regimen.
+nc-scout is a simple naming convention checker tool. It allows you to search directories for non-matching filenames to a naming convention. It is a personal tool I wanted for system cleanliness that became a larger project. It currently only supports predefined regular expressions as defined [here](src/naming.c), although, I have played with the idea of creating a configuration file based approach, where you could create a much more customized search regimen.
 
 ## Dependencies
 * make
@@ -44,18 +44,37 @@ nc-scout [OPTION]? [COMMAND] [CONVENTION] [DIRECTORY]
 | `kebabcase`       | example-file-name.txt                                      |
 | `cobolcase`       | EXAMPLE-FILE-NAME.txt                                      |
 
+### Strict vs. Lenient:
+The default enforcement of naming conventions for a search is lenient, although, using
+the `-s` or `--strict` option, you can strictly enforce the naming convention for that search.
+
+Strict enforcement means that the naming convention **must** be present in it's entirety, while
+lenient enforcement means that the naming convention **could** be present in it's entirety if more
+text is added, but not removed or changed.
+
+Example: **example.txt**
+
+Matches strictly:
+* flatcase - Every letter of <strong>example.txt</strong> is lowercase, so it exactly matches the convention.  
+
+Matches leniently:
+* kebabcase - Could be extended to <strong>example<span style="color: green;">-file</span>.txt</strong> to match the convention in it's entirety
+* snakecase - Could be extended to <strong>example<span style="color: green;">_file</span>.txt</strong> to match the convention in it's entirety
+* camelcase - Could be extended to <strong>example<span style="color: green;">File</span>.txt</strong> to match the convention in it's entirety
+
 ## Build Instructions
-**To begin, go to the root of the repository:**
+To begin, clone the project and go to the root of the repository:
 ```bash
+git clone https://github.com/BlinkDynamo/nc-scout.git nc-scout
 cd nc-scout/
 ```
 
-**Build the binary:**
+Build the binary:
 ```bash
 make
 ``` 
 
-**Run tests (optional):**
+Run tests (optional):
 ```bash
 make check
 ```
@@ -63,24 +82,26 @@ make check
 ## Installation
 If the project built successfully, you can now either use the binary directly from the repository, or install it to your system.
 
-**To use the binary directly:**
+To use the binary directly:
 ```bash
 cd build/
+# called directly from the build directory.
 ./nc-scout --help
 ```
 
-**To install the binary and use it systemwide:**
+To install the binary and use it systemwide:
 ```bash
 sudo make install
+# called from /usr/local/bin/
 nc-scout --help
 ```
 
-**Should you want to clean the build/ and tests/ directories:**
+Should you want to clean the build/ and tests/ directories:
 ```bash
 make clean
 ```
 
-**To uninstall the binary:**
+To uninstall the binary:
 ```bash
 sudo make uninstall
 ```
