@@ -28,9 +28,9 @@ nc-scout [OPTION]? [COMMAND] [CONVENTION] [DIRECTORY]
 | `-m, --matches`   | Print matches instead of non-matches.                      |
 
 ### Commands
-|Command   | Description                                                                         |
-|----------|-------------------------------------------------------------------------------------| 
-| `search` | Search a directory for files with a filename body that matches a naming convention. |
+|Command   | Description                                                                       |
+|----------|-----------------------------------------------------------------------------------| 
+| `search` | Search a directory for files with a filename body that match a naming convention. |
 
 
 ### Conventions
@@ -48,14 +48,16 @@ nc-scout [OPTION]? [COMMAND] [CONVENTION] [DIRECTORY]
 The **filename body** is the text of a file's full filename, ignoring leading periods and file extentions. The final period itself and the text that follows it is what is defined as the file extention. `search` is only performed on the filename body of a filename.
 
 ```bash
-# Matches: 
+# Search for matches:
 nc-scout search snakecase --matches ./
+# Output:
 .example_file           # The leading period is ignored, resulting in the filename body 'example_file', which is snakecase.
 example_file.txt        # The file extention '.txt' is ignored, resulting in the filename body 'example_file', which is snakecase.
 .example_file.RAR       # The file extention '.RAR' is ignored, resulting in the filename body 'example_file', which is snakecase.
 
-# Non-matches: 
+# Search for non-matches: 
 nc-scout search flatcase ./
+# Output:
 ..example_file          # The leading period is ignored, resulting in the filename body '.example', which is not snakecase.
 example_file.exe.txt    # The file extention '.txt' is ignored, resulting in the filename body 'example_file.exe', which is not snakecase.
 
@@ -69,13 +71,13 @@ Strict enforcement means that the naming convention **must** be present in it's 
 
 Example File: **example.txt** <em>(filename body is 'example')</em>
 
-Matches strictly:
-* **flatcase** - The filename body <em>'example'</em> is all lowercase, so it exactly matches the convention.
+Strict matches:
+* `flatcase` - The filename body <em>'example'</em> is all lowercase, so it strictly matches the convention.
 
-Matches leniently:
-* **kebabcase** - The filename body <em>'example'</em> could be extended to <em>'example-file'</em> to match the convention in its entirety
-* **snakecase** - The filename body <em>'example'</em> could be extended to <em>'example_file' to match the convention in its entirety
-* **camelcase** - The filename body <em>'example'</em> could be extended to <em>'exampleFile' to match the convention in its entirety
+Lenient matches:
+* `kebabcase` - The filename body <em>'example'</em> could be extended to <em>'example-file'</em>, so it leniently matches the convention.
+* `snakecase` - the filename body <em>'example'</em> could be extended to <em>'example_file', so it leniently matches the convention.
+* `camelcase` - The filename body <em>'example'</em> could be extended to <em>'exampleFile', so it leniently matches the convention.
 
 ## Build Instructions
 To begin, clone the project and go to the root of the repository:
