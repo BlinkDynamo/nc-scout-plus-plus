@@ -20,7 +20,7 @@ EXEC = build/nc-scout
 TESTS_EXEC_BUILD = tests/build.sh
 TESTS_EXEC_CHECK = tests/check.sh
 
-# Exports.
+# Exports. Used by scripts in tests/.
 export BUILD_DIR := $(BUILD_DIR)
 export TESTS_DIR := $(TESTS_DIR)
 
