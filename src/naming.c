@@ -25,7 +25,43 @@
 *   3. This notice may not be removed or altered from any source
 *   distribution. 
 *
-*********************************************************************************************/
+*   ---------------------- STRUCTURE OF REGULAR EXPRESSION DEFINITIONS -----------------------
+* 
+*   Each regular expression is made up of three sections:
+*  
+*   1. A non-capturing group at the beginning to allow for dotfiles (ie .local/):
+*      ^\\.?
+*
+*   2. A middle body that enforces the required naming convention:
+*      [a-z0-9]+   'flatcase' in this example.
+*
+*   3. A non-capturing group at the end that allows for the file extention (ie foo.txt):
+*      (\\.[A-Za-z0-9]+?)
+*   
+*   ------------------------------- STRICT REGULAR EXPRESSIONS -------------------------------
+*
+*   Strict regular expressions for naming conventions. The expression must follow the main
+*   defining pattern throughout the name.
+*
+*   Correct: "camelCase" is a correct strict camelcase name as it follows the defining pattern
+*            throughout it's name. 
+* 
+*   Incorrect: "camel" is an incorrect strict camelcase name because even though you could add
+*              a "Case", it does not exhibit the main defining pattern (the camel hump).
+*
+*   ------------------------------ LENIENT REGULAR EXPRESSIONS -------------------------------
+*
+*   Lenient regular expressions for naming conventions. The expression must be able to
+*   be made correct to the main defining pattern if more text is added, but not removed. 
+*   Some defines may be the same as the strict version. 
+*
+*   Correct: "kebab" is a correct lenient kebabcase name as a "-case" could be added to
+*            make it a correct strict kebabcase ("kebab-case").
+*
+*   Incorrect: "Kebab" is an incorrect lenient kebabcase name because to make it valid
+*              you must change the "K" to a "k", as well as add a "-case".
+* 
+********************************************************************************************/
 
 #include <stdio.h>
 #include <string.h>
@@ -33,35 +69,30 @@
 
 #include "naming.h"
 
-/*
- * Each regular expression is made up of three sections:
- *  
- *   1. A non-capturing group at the beginning to allow for dotfiles (ie .local/):
- *      ^\\.?
- *
- *   2. A middle body that enforces the required naming convention:
- *      [a-z0-9]+   'flatcase' in this example.
- *
- *   3. A non-capturing group at the end that allows for the file extention (ie foo.txt):
- *      (\\.[A-Za-z0-9]+?)
- *
- */
-#define EXPR_FLATCASE       "^\\.?[a-z0-9]+(\\.[A-Za-z0-9]+)?$"
-#define EXPR_CAMELCASE      "^\\.?[a-z]+([A-Z][a-z0-9]+)+(\\.[A-Za-z0-9]+)?$"
-#define EXPR_PASCALCASE     "^\\.?([A-Z][a-z0-9]+)+(\\.[A-Za-z0-9]+)?$"
-#define EXPR_SNAKECASE      "^\\.?[a-z0-9]+(_[a-z0-9]+)+(\\.[A-Za-z0-9]+)?$"
-#define EXPR_CONSTANTCASE   "^\\.?[A-Z0-9]+(_[A-Z0-9]+)+(\\.[A-Za-z0-9]+)?$"
-#define EXPR_KEBABCASE      "^\\.?[a-z0-9]+(-[a-z0-9]+)+(\\.[A-Za-z0-9]+)?$"
-#define EXPR_COBOLCASE      "^\\.?[A-Z0-9]+(-[A-Z0-9]+)+(\\.[A-Za-z0-9]+)?$"
+#define EXPR_FLATCASE_STRICT        "^\\.?[a-z0-9]+(\\.[A-Za-z0-9]+)?$"
+#define EXPR_CAMELCASE_STRICT       "^\\.?[a-z]+([A-Z][a-z0-9]+)+(\\.[A-Za-z0-9]+)?$"
+#define EXPR_PASCALCASE_STRICT      "^\\.?([A-Z][a-z0-9]+)+(\\.[A-Za-z0-9]+)?$"
+#define EXPR_SNAKECASE_STRICT       "^\\.?[a-z0-9]+(_[a-z0-9]+)+(\\.[A-Za-z0-9]+)?$"
+#define EXPR_CONSTANTCASE_STRICT    "^\\.?[A-Z0-9]+(_[A-Z0-9]+)+(\\.[A-Za-z0-9]+)?$"
+#define EXPR_KEBABCASE_STRICT       "^\\.?[a-z0-9]+(-[a-z0-9]+)+(\\.[A-Za-z0-9]+)?$"
+#define EXPR_COBOLCASE_STRICT       "^\\.?[A-Z0-9]+(-[A-Z0-9]+)+(\\.[A-Za-z0-9]+)?$"
+
+#define EXPR_FLATCASE_LENIENT       EXPR_FLATCASE_STRICT
+#define EXPR_CAMELCASE_LENIENT      "^\\.?[a-z]+([A-Z][a-z0-9]+)*(\\.[A-Za-z0-9]+)?$"
+#define EXPR_PASCALCASE_LENIENT     EXPR_PASCALCASE_STRICT
+#define EXPR_SNAKECASE_LENIENT      "^\\.?[a-z0-9]+(_[a-z0-9]+)*(\\.[A-Za-z0-9]+)?$"
+#define EXPR_CONSTANTCASE_LENIENT   "^\\.?[A-Z0-9]+(_[A-Z0-9]+)*(\\.[A-Za-z0-9]+)?$"
+#define EXPR_KEBABCASE_LENIENT      "^\\.?[a-z0-9]+(-[a-z0-9]+)*(\\.[A-Za-z0-9]+)?$"
+#define EXPR_COBOLCASE_LENIENT      "^\\.?[A-Z0-9]+(-[A-Z0-9]+)*(\\.[A-Za-z0-9]+)?$"
 
 struct Convention Conventions[] = {
-    {"flatcase", EXPR_FLATCASE}, 
-    {"camelcase", EXPR_CAMELCASE},
-    {"pascalcase", EXPR_PASCALCASE},
-    {"snakecase", EXPR_SNAKECASE},
-    {"constantcase", EXPR_CONSTANTCASE},
-    {"kebabcase", EXPR_KEBABCASE},
-    {"cobolcase", EXPR_COBOLCASE},
+    {"flatcase", EXPR_FLATCASE_STRICT, EXPR_FLATCASE_LENIENT}, 
+    {"camelcase", EXPR_CAMELCASE_STRICT, EXPR_CAMELCASE_LENIENT},
+    {"pascalcase", EXPR_PASCALCASE_STRICT, EXPR_PASCALCASE_LENIENT},
+    {"snakecase", EXPR_SNAKECASE_STRICT, EXPR_SNAKECASE_LENIENT},
+    {"constantcase", EXPR_CONSTANTCASE_STRICT, EXPR_CONSTANTCASE_LENIENT},
+    {"kebabcase", EXPR_KEBABCASE_STRICT, EXPR_KEBABCASE_LENIENT},
+    {"cobolcase", EXPR_COBOLCASE_STRICT, EXPR_COBOLCASE_LENIENT},
 };
 
 const int n_members_in_Conventions = (sizeof(Conventions) / sizeof(struct Convention));
@@ -75,7 +106,7 @@ bool naming_set_expression(const char *arg_naming_convention, char **ptr_search_
 {
     for (int i = 0; i < n_members_in_Conventions; i++) {
         if (strcmp(arg_naming_convention, Conventions[i].name) == 0) {
-            *ptr_search_expression = Conventions[i].regex;
+            *ptr_search_expression = Conventions[i].expr_lenient;
             return true;
         }
     }

@@ -35,7 +35,8 @@
 
 struct Convention {
     char *name;
-    char *regex;
+    char *expr_strict;
+    char *expr_lenient;
 };
 
 bool naming_set_expression(const char *arg_naming_convention, char **ptr_search_expression);
