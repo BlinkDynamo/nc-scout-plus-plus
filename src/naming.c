@@ -68,6 +68,7 @@
 #include <regex.h>
 
 #include "naming.h"
+#include "nc-scout.h"
 
 #define EXPR_FLATCASE_STRICT        "^\\.?[a-z0-9]+(\\.[A-Za-z0-9]+)?$"
 #define EXPR_CAMELCASE_STRICT       "^\\.?[a-z]+([A-Z][a-z0-9]+)+(\\.[A-Za-z0-9]+)?$"
@@ -100,13 +101,18 @@ const int n_members_in_Conventions = (sizeof(Conventions) / sizeof(struct Conven
 /* 
  * Attempts to match arg_naming_convention against every Conventions[i].name in Conventions[].
  * If a match is found, dereference the pointer ptr_search_expression points to, set it to
- * Conventions[i].regex, and return true. Otherwise, return false and keep search_expression NULL.
+ * Conventions[i].expr_lenient (the default) unless strict_flag is true, in which case set it
+ * to Conventions[i].expr_strict. Return true. If no match is found, return false and keep 
+ * search_expression NULL.
  */
 bool naming_set_expression(const char *arg_naming_convention, char **ptr_search_expression)
 {
     for (int i = 0; i < n_members_in_Conventions; i++) {
         if (strcmp(arg_naming_convention, Conventions[i].name) == 0) {
-            *ptr_search_expression = Conventions[i].expr_lenient;
+            if (strict_flag)
+                *ptr_search_expression = Conventions[i].expr_strict;
+            else
+                *ptr_search_expression = Conventions[i].expr_lenient;
             return true;
         }
     }
