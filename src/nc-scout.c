@@ -38,6 +38,7 @@
 #include "naming.h"
 #include "search.h"
 #include "version.h"
+#include "help.h"
 
 /* Flag externs. */
 bool full_path_flag = false;
@@ -71,52 +72,10 @@ int subc_exec_search(int argc, char *argv[])
 
 int subc_exec_help(int argc)
 {
-    char *message = 
-    "Usage: nc-scout [OPTION]? [COMMAND] [CONVENTION] [DIRECTORY]\n"
-    "\n"
-    "Options:\n"
-    "  -h, --help       Show this help message\n"
-    "  -v, --version    Show the program version\n"
-    "  -f, --full-path  Display files as a full path\n"
-    "  -m, --matches    Display files that match the provided naming convention\n"
-    "  -s, --strict     Enforces the naming convention strictly\n"
-    "\n"
-    "Commands:\n"
-    "  search           Search for filenames that do not match a naming convention in a directory\n"
-    "\n"
-    "Conventions:\n"
-    "  flatcase         examplefilename.txt\n"
-    "  camelcase        exampleFileName.txt\n"
-    "  pascalcase       ExampleFileName.txt\n"
-    "  snakecase        example_file_name.txt\n"
-    "  constantcase     EXAMPLE_FILE_NAME.txt\n"
-    "  kebabcase        example-file-name.txt\n"
-    "  cobolcase        EXAMPLE-FILE-NAME.txt\n"
-    "\n"
-    "Strict vs. Lenient:\n"
-    "  The default enforcement of naming conventions for a search is lenient, although, using\n"
-    "  the -s or --strict option, you can strictly enforce the naming convention for that search.\n"
-    "\n"
-    "  Strict enforcement means that the naming convention MUST be present in it's entirety, while\n"
-    "  lenient enforcement means that the naming convention COULD be present in it's entirety if more\n"
-    "  text is added, but not removed or changed.\n"
-    "\n"
-    "  Example:\n"
-    "    example.txt\n"
-    "\n"
-    "    Matches strictly:\n"
-    "      flatcase - Exactly matches the convention in it's entirety\n"
-    "\n"
-    "    Matches leniently:\n"
-    "      kebabcase - Could be extended to example-file.txt to match the convention in it's entirety\n"
-    "      snakecase - Could be extended to example_file.txt to match the convention in it's entirety\n"
-    "      camelcase - Could be extended to exampleFile.txt to match the convention in it's entirety\n"
-    "\n"
-    "";
     /* Input must be either nc-scout -h or nc-scout --help exactly to recieve the general nc-scout help. 
      * Otherwise, they likely intend to recieve help regarding a command directly preceding -h or --help. */
     if (argc == 2) {
-        printf("%s", message);
+        printf("%s", HELP_MESSAGE);
         return EXIT_SUCCESS;
     } else {
         printf("Incorrect usage.\nDo `nc-scout --help` for more information about usage.\n");
