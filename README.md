@@ -76,8 +76,8 @@ Strict matches:
 
 Lenient matches:
 * `kebabcase` - The filename body <em>'example'</em> could be extended to <em>'example-file'</em>, so it leniently matches the convention.
-* `snakecase` - the filename body <em>'example'</em> could be extended to <em>'example_file', so it leniently matches the convention.
-* `camelcase` - The filename body <em>'example'</em> could be extended to <em>'exampleFile', so it leniently matches the convention.
+* `snakecase` - the filename body <em>'example'</em> could be extended to <em>'example_file'</em>, so it leniently matches the convention.
+* `camelcase` - The filename body <em>'example'</em> could be extended to <em>'exampleFile'</em>, so it leniently matches the convention.
 
 ## Build Instructions
 To begin, clone the project and go to the root of the repository:
