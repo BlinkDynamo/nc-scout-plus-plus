@@ -66,20 +66,21 @@ void process_current_file(struct dirent *dp, char full_path[PATH_MAX], regex_t r
     }   
 }
 
-/* 
- * Moves recursively down dir_path, looking for files and directories that match or do not match the regular expression
- * 'search_expression', depending on the state of matches_flag.
+/*
+ * Search dir_path for files and directories that match or do not match the regular expression
+ * 'search_expression', depending on the state of matches_flag. This will be done recursively
+ * if recursive_flag is true.
  */
 void search_directory(const char *dir_path, regex_t regex)
 {
-    /* dir_path is known to exist at this point, but opendir() can still fail. */
+    /* dir_path is known to exist at this point, but opendir() can still fail from permissions. */
     DIR *dir = opendir(dir_path);
     if (dir == NULL) {
         printf("Error: cannot access %s due to Error %d (%s).\n", 
                 dir_path,
-                errno,  
+                errno,
                 strerror(errno));
-        return; 
+        return;
     }
     struct dirent *dp;
 
@@ -88,6 +89,7 @@ void search_directory(const char *dir_path, regex_t regex)
         if (strcmp(dp->d_name, ".") == 0 || strcmp(dp->d_name, "..") == 0)
             continue;
 
+        /* Strip an extra '/' if the dir_path provided ended in a '/'. */
         char full_path[PATH_MAX];
         if (dir_path[strlen(dir_path) - 1] == '/') {
             snprintf(full_path, sizeof(full_path), "%s%s", dir_path, dp->d_name);
@@ -97,11 +99,13 @@ void search_directory(const char *dir_path, regex_t regex)
 
         struct stat statbuf;
         if (lstat(full_path, &statbuf) == 0) {
+            /* Directory. */
             if (S_ISDIR(statbuf.st_mode)) {
                 process_current_file(dp, full_path, regex);
-                /* Recurse each subdirectory. */
+                /* Recurse each subdirectory if --recursive is set. */
                 if (recursive_flag)
                     search_directory(full_path, regex);
+            /* Regular file. */
             } else if (S_ISREG(statbuf.st_mode)) { 
                 process_current_file(dp, full_path, regex);
             }
