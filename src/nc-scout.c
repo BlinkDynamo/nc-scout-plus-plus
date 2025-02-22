@@ -42,8 +42,9 @@
 
 /* Flag externs. */
 bool full_path_flag = false;
-bool matches_flag = false;
-bool strict_flag = false;
+bool matches_flag   = false;
+bool strict_flag    = false;
+bool recursive_flag = false;
 
 /*
  * Expects a supported naming convention and existing directory in argv[1] and argv[2] respectively. If given these arguments, 
@@ -103,14 +104,15 @@ int main(int argc, char *argv[])
         {
             {"version", no_argument, 0, 'v'},
             {"help", no_argument, 0, 'h'},
-            {"full-path", no_argument, 0, 'f'},
+            {"full-path", no_argument, 0, 'f'}, 
             {"matches", no_argument, 0, 'm'},
             {"strict", no_argument, 0, 's'},
+            {"recursive", no_argument, 0, 'R'},
             {0, 0, 0, 0}
         };
         
         int option_index = 0;
-        current_opt = getopt_long (argc, argv, "vhfms", long_options, &option_index);
+        current_opt = getopt_long (argc, argv, "vhfmsR", long_options, &option_index);
         /* Break if at the end of the options. */
         if (current_opt == -1)
             break;
@@ -137,6 +139,10 @@ int main(int argc, char *argv[])
 
         case 's':
             strict_flag = true;
+            break;
+
+        case 'R':
+            recursive_flag = true;
             break;
 
         default:

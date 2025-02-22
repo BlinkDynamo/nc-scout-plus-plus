@@ -39,6 +39,7 @@
 "  -f, --full-path  Display files as a full path\n" \
 "  -m, --matches    Display files that match the provided naming convention\n" \
 "  -s, --strict     Enforces the naming convention strictly\n" \
+"  -R, --recursive  Recursively searches through subdirectories\n" \
 "\n" \
 "Commands:\n" \
 "  search           Search for filenames that do not match a naming convention in a directory\n" \

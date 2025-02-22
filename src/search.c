@@ -47,7 +47,7 @@
 void print_filename(struct dirent *dp, char full_path[PATH_MAX])
 {
     if (full_path_flag == true)
-        printf("%s%s\n", full_path, dp->d_name);
+        printf("%s\n", full_path);
 
     else if (full_path_flag == false)
         printf("%s\n", dp->d_name);
@@ -100,7 +100,8 @@ void search_directory(const char *dir_path, regex_t regex)
             if (S_ISDIR(statbuf.st_mode)) {
                 process_current_file(dp, full_path, regex);
                 /* Recurse each subdirectory. */
-                search_directory(full_path, regex);
+                if (recursive_flag)
+                    search_directory(full_path, regex);
             } else if (S_ISREG(statbuf.st_mode)) { 
                 process_current_file(dp, full_path, regex);
             }

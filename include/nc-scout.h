@@ -35,5 +35,6 @@
 extern bool full_path_flag;
 extern bool matches_flag;
 extern bool strict_flag;
+extern bool recursive_flag;
 
 #endif
