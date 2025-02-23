@@ -43,73 +43,94 @@
 #include "search.h"
 #include "nc-scout.h"
 
-/* Prints a d_name formatted according to full_path_flag. Depends on full_path_flag to be accessible. */
-void print_filename(struct dirent *dp, char full_path[PATH_MAX])
-{
-    if (full_path_flag == true)
-        printf("%s\n", full_path);
+const char *abs_initial_search_path;
+bool initial_search = true;
 
-    else if (full_path_flag == false)
-        printf("%s\n", dp->d_name);
+// Returns the difference of an absolute initial path and an absolute current path.
+const char *get_relative_path(const char *abs_initial_path, const char *abs_current_path) {
+    while (*abs_initial_path && *abs_current_path && *abs_initial_path == *abs_current_path) {
+        abs_initial_path++;
+        abs_current_path++;
+    }
+    return abs_current_path;
 }
 
-/* Compares a d_name to a regular expression. Depends on matches_flag to be accessible. */
-void process_current_file(struct dirent *dp, char full_path[PATH_MAX], regex_t regex)
-{
+// Compares a d_name to a regular expression. Depends on matches_flag to be accessible.
+void process_current_file(struct dirent *dp, char abs_current_file_path[PATH_MAX], regex_t regex)
+{ 
+    // Terminate this newly created absolute initial search path with a "/" to allow get_relative path
+    // to remove it later.
+
     if (matches_flag == true) {
-        if (naming_match_regex(regex, dp->d_name))
-            print_filename(dp, full_path);
+        if (naming_match_regex(regex, dp->d_name)) {
+            // Matches with full path.  
+            if (full_path_flag == true) 
+                printf("%s\n", abs_current_file_path); 
+            // Matches with relative path.
+            else if (full_path_flag == false)
+                printf("%s\n", get_relative_path(abs_initial_search_path, abs_current_file_path));
+        }
     } 
-    else if (matches_flag == false) {
-        if (!naming_match_regex(regex, dp->d_name))
-            print_filename(dp, full_path);
-    }   
-}
+    else {
+        if (!naming_match_regex(regex, dp->d_name)) {
+            // Non-matches with full path. 
+            if (full_path_flag == true)
+                printf("%s\n", abs_current_file_path);
+            // Non-matches with relative path.
+            else if (full_path_flag == false)
+                printf("%s\n", get_relative_path(abs_initial_search_path, abs_current_file_path));
+        }
+    }
+}   
 
-/*
- * Search dir_path for files and directories that match or do not match the regular expression
- * 'search_expression', depending on the state of matches_flag. This will be done recursively
- * if recursive_flag is true.
- */
-void search_directory(const char *dir_path, regex_t regex)
+// Search dir_path for files and directories that match or do not match the regular expression
+// 'search_expression', depending on the state of matches_flag. This will be done recursively
+// if recursive_flag is true.
+void search_directory(const char *search_path, regex_t regex)
 {
-    /* dir_path is known to exist at this point, but opendir() can still fail from permissions. */
-    DIR *dir = opendir(dir_path);
-    if (dir == NULL) {
-        printf("Error: cannot access %s due to Error %d (%s).\n", 
-                dir_path,
-                errno,
-                strerror(errno));
+    const char *abs_search_path = canonicalize_file_name(search_path);
+    
+    // If this is the first time search_directory has been called, save the absolute initial search path.
+    if (initial_search == true) {
+        abs_initial_search_path = strcat(abs_search_path, "/");
+        initial_search = false;
+    }
+
+    // dir_path is known to exist at this point, but opendir() can still fail from permissions.
+    DIR *current_dir = opendir(abs_search_path);
+    if (current_dir == NULL) {
+        printf("Error: cannot access %s due to Error %d (%s).\n", abs_search_path, errno, strerror(errno));
         return;
     }
+    
     struct dirent *dp;
-
-    while ((dp = readdir(dir)) != NULL) {
-        /* Skip current and parent entries. */
+    while ((dp = readdir(current_dir)) != NULL) {
+        // Skip current and parent entries.
         if (strcmp(dp->d_name, ".") == 0 || strcmp(dp->d_name, "..") == 0)
             continue;
 
-        /* Strip an extra '/' if the dir_path provided ended in a '/'. */
-        char full_path[PATH_MAX];
-        if (dir_path[strlen(dir_path) - 1] == '/') {
-            snprintf(full_path, sizeof(full_path), "%s%s", dir_path, dp->d_name);
-        } else {
-            snprintf(full_path, sizeof(full_path), "%s/%s", dir_path, dp->d_name);
+        // Create a variable 'current_file' with the supplied path and dp->d_name combined.
+        // If the supplied path ends in a '/', remove it before concatenating path and dp-d_name
+        char abs_current_file_path[PATH_MAX];
+        snprintf(abs_current_file_path, sizeof(abs_current_file_path), "%s/%s", abs_search_path, dp->d_name);
+
+        // Determine file type and perform actions accordingly.
+        struct stat statbuf;
+        if (lstat(abs_current_file_path, &statbuf) != 0) {
+            printf("Error: lstat failed due to Error %d (%s).\n", errno, strerror(errno));
+            return;
         }
 
-        struct stat statbuf;
-        if (lstat(full_path, &statbuf) == 0) {
-            /* Directory. */
-            if (S_ISDIR(statbuf.st_mode)) {
-                process_current_file(dp, full_path, regex);
-                /* Recurse each subdirectory if --recursive is set. */
-                if (recursive_flag)
-                    search_directory(full_path, regex);
-            /* Regular file. */
-            } else if (S_ISREG(statbuf.st_mode)) { 
-                process_current_file(dp, full_path, regex);
-            }
+        // current_file is a directory.
+        if (S_ISDIR(statbuf.st_mode)) {
+            process_current_file(dp, abs_current_file_path, regex);
+            // Recurse each subdirectory if --recursive is set.
+            if (recursive_flag)
+                search_directory(abs_current_file_path, regex);
+        // current_file is a regular file.
+        } else if (S_ISREG(statbuf.st_mode)) { 
+            process_current_file(dp, abs_current_file_path, regex);
         }
     }
-    closedir(dir);
+    closedir(current_dir);
 }
