@@ -36,13 +36,13 @@
 "Options:\n" \
 "  -h, --help       Show this help message\n" \
 "  -v, --version    Show the program version\n" \
-"  -f, --full-path  Display files as a full path\n" \
-"  -m, --matches    Display files that match the provided naming convention\n" \
-"  -s, --strict     Enforces the naming convention strictly\n" \
-"  -R, --recursive  Recursively searches through subdirectories\n" \
+"  -f, --full-path  Display the full path of matching files instead of relative paths\n" \
+"  -m, --matches    Display matching files instead of non-matching\n" \
+"  -s, --strict     Enforce the naming convention strictly\n" \
+"  -R, --recursive  Recursively search through subdirectories\n" \
 "\n" \
 "Commands:\n" \
-"  search           Search for filenames that do not match a naming convention in a directory\n" \
+"  search           Search a directory for files that do not match a naming convention\n" \
 "\n" \
 "Conventions:\n" \
 "  flatcase         examplefilename.txt\n" \

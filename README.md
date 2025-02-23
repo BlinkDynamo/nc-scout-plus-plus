@@ -20,29 +20,30 @@ The layout of a nc-scout command.
 nc-scout [OPTION]? [COMMAND] [CONVENTION] [DIRECTORY]
 
 ### Options
-| Flag              | Description                                                |
-|-------------------|------------------------------------------------------------|
-| `-h, --help`      | Show a helpful message.                                    |
-| `-v, --version`   | Show what version of the program you are using.            |
-| `-f, --full-path` | Display matches by their full path name.                   |
-| `-m, --matches`   | Print matches instead of non-matches.                      |
+| Flag              | Description                                                              |
+|-------------------|--------------------------------------------------------------------------|
+| `-h, --help`      | Show a helpful message.                                                  |
+| `-v, --version`   | Show what version of the program you are using.                          |
+| `-f, --full-path` | Display the full path of matching files instead of relative paths.       |
+| `-m, --matches`   | Print matches instead of non-matches.                                    |
+| `-R, --recursive` | Recursively search through subdirectories.                               |
 
 ### Commands
 |Command   | Description                                                                       |
 |----------|-----------------------------------------------------------------------------------| 
-| `search` | Search a directory for files with a filename body that match a naming convention. |
+| `search` | Search a directory for files that do not match a naming convention.               |
 
 
 ### Conventions
-| Convention        | Example                                                    |
-|-------------------|------------------------------------------------------------|
-| `flatcase`        | examplefilename.txt                                        |
-| `camelcase`       | exampleFileName.txt                                        |
-| `pascalcase`      | ExampleFileName.txt                                        |
-| `snakecase`       | example_file_name.txt                                      |
-| `constantcase`    | EXAMPLE_FILE_NAME.txt                                      |
-| `kebabcase`       | example-file-name.txt                                      |
-| `cobolcase`       | EXAMPLE-FILE-NAME.txt                                      |
+| Convention        | Example                                                                  |
+|-------------------|--------------------------------------------------------------------------|
+| `flatcase`        | examplefilename.txt                                                      |
+| `camelcase`       | exampleFileName.txt                                                      |
+| `pascalcase`      | ExampleFileName.txt                                                      |
+| `snakecase`       | example_file_name.txt                                                    |
+| `constantcase`    | EXAMPLE_FILE_NAME.txt                                                    |
+| `kebabcase`       | example-file-name.txt                                                    |
+| `cobolcase`       | EXAMPLE-FILE-NAME.txt                                                    |
 
 ### What is the Filename Body of a Filename?
 The **filename body** is the text of a file's full filename, ignoring leading periods and file extentions. The final period itself and the text that follows it is what is defined as the file extention. `search` is only performed on the filename body of a filename.
