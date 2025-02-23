@@ -43,9 +43,6 @@
 #include "search.h"
 #include "nc-scout.h"
 
-const char *abs_initial_search_path;
-bool initial_search = true;
-
 // Returns the difference of an absolute initial path and an absolute current path.
 const char *get_relative_path(const char *abs_initial_path, const char *abs_current_path) {
     while (*abs_initial_path && *abs_current_path && *abs_initial_path == *abs_current_path) {
@@ -56,8 +53,8 @@ const char *get_relative_path(const char *abs_initial_path, const char *abs_curr
 }
 
 // Compares a d_name to a regular expression. Depends on matches_flag to be accessible.
-void process_current_file(struct dirent *dp, char abs_current_file_path[PATH_MAX], regex_t regex)
-{ 
+void process_current_file(struct dirent *dp, char abs_current_file_path[PATH_MAX], char *abs_initial_search_path, regex_t regex)
+{
     // Terminate this newly created absolute initial search path with a "/" to allow get_relative path
     // to remove it later.
 
@@ -70,7 +67,7 @@ void process_current_file(struct dirent *dp, char abs_current_file_path[PATH_MAX
             else if (full_path_flag == false)
                 printf("%s\n", get_relative_path(abs_initial_search_path, abs_current_file_path));
         }
-    } 
+    }
     else {
         if (!naming_match_regex(regex, dp->d_name)) {
             // Non-matches with full path. 
@@ -81,7 +78,7 @@ void process_current_file(struct dirent *dp, char abs_current_file_path[PATH_MAX
                 printf("%s\n", get_relative_path(abs_initial_search_path, abs_current_file_path));
         }
     }
-}   
+}
 
 // Search dir_path for files and directories that match or do not match the regular expression
 // 'search_expression', depending on the state of matches_flag. This will be done recursively
@@ -91,9 +88,10 @@ void search_directory(const char *search_path, regex_t regex)
     const char *abs_search_path = canonicalize_file_name(search_path);
     
     // If this is the first time search_directory has been called, save the absolute initial search path.
-    if (initial_search == true) {
-        abs_initial_search_path = strcat(abs_search_path, "/");
-        initial_search = false;
+    // Append a "/" to the end of abs_initial_search_path to allow get_relative_path to properly find the difference.
+    static char *abs_initial_search_path = NULL;
+    if (abs_initial_search_path == NULL) {
+        asprintf(&abs_initial_search_path, "%s/", abs_search_path);
     }
 
     // dir_path is known to exist at this point, but opendir() can still fail from permissions.
@@ -123,13 +121,13 @@ void search_directory(const char *search_path, regex_t regex)
 
         // current_file is a directory.
         if (S_ISDIR(statbuf.st_mode)) {
-            process_current_file(dp, abs_current_file_path, regex);
+            process_current_file(dp, abs_current_file_path, abs_initial_search_path, regex);
             // Recurse each subdirectory if --recursive is set.
             if (recursive_flag)
                 search_directory(abs_current_file_path, regex);
         // current_file is a regular file.
         } else if (S_ISREG(statbuf.st_mode)) { 
-            process_current_file(dp, abs_current_file_path, regex);
+            process_current_file(dp, abs_current_file_path, abs_initial_search_path, regex);
         }
     }
     closedir(current_dir);
