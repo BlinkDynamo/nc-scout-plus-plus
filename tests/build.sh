@@ -10,25 +10,32 @@ if [ -z ${BUILD_DIR} ] && [ -z ${TESTS_DIR} ]; then
     exit 1
 fi
 
+# Source the data file including arrays of test filenames, arranged by test.
+source "tests/data.sh.inc"
+
 #----------------------------------------------------------------------------------------------#
 # Definitions 
 #----------------------------------------------------------------------------------------------#
 build_test_directory() {
-    directory_name="$1"         # The name of the directory that will be created.
-    test_filenames_file="$2"    # The file of filenames in /tests/data that should be read.
+    # The name of test being executed,  as well as the array name of it's needed data in tests/filenames.inc.
+    testname="$1"
 
-    mkdir -p "${TESTS_DIR}/${directory_name}"
+    mkdir -p "${TESTS_DIR}/${testname}"
+    printf "Built test directory '%s'.\n" "${testname}"
 
-    # Read the filenames from test_filenames_file into an array of strings.
-    mapfile -t test_filenames_array < "${test_filenames_file}"
-    
-    for file in "${test_filenames_array[@]}"; do
-       touch "${TESTS_DIR}/${directory_name}/${file}" 
+    # Construct the variable name dynamically
+
+    # Use eval to access the array
+    eval "values=(\"\${${testname}[@]}\")"
+    if eval "[[ -z \"\${${testname}[*]}\" ]]" 2>/dev/null; then
+        echo "Unable to evaluate $testname to an array."
+        return
+    fi
+
+    # Iterate over the values
+    for item in "${values[@]}"; do
+        touch "${TESTS_DIR}/${testname}/$item"
     done
-
-    printf "Built test directory '%s' from data file '%s'.\n" \
-           "${directory_name}" \
-           "${test_filenames_file}"
 }
 
 #----------------------------------------------------------------------------------------------#
@@ -36,13 +43,22 @@ build_test_directory() {
 #----------------------------------------------------------------------------------------------#
 printf "\nBuilding test directories...\n\n"
 
-# Create test directory structure silently.
-build_test_directory "flatcase" "tests/data/flatcase-filenames"
-build_test_directory "camelcase" "tests/data/camelcase-filenames"
-build_test_directory "pascalcase" "tests/data/pascalcase-filenames"
-build_test_directory "kebabcase" "tests/data/kebabcase-filenames"
-build_test_directory "cobolcase" "tests/data/cobolcase-filenames"
-build_test_directory "snakecase" "tests/data/snakecase-filenames"
-build_test_directory "constantcase" "tests/data/constantcase-filenames"
+# Strict matches.
+build_test_directory "flatcase_strict_matches"
+build_test_directory "camelcase_strict_matches"
+build_test_directory "pascalcase_strict_matches"
+build_test_directory "kebabcase_strict_matches"
+build_test_directory "cobolcase_strict_matches"
+build_test_directory "snakecase_strict_matches"
+build_test_directory "constantcase_strict_matches"
+
+# Lenient matches
+build_test_directory "flatcase_lenient_matches"
+build_test_directory "camelcase_lenient_matches"
+build_test_directory "pascalcase_lenient_matches"
+build_test_directory "kebabcase_lenient_matches"
+build_test_directory "cobolcase_lenient_matches"
+build_test_directory "snakecase_lenient_matches"
+build_test_directory "constantcase_lenient_matches"
 
 printf "\nTest directories built successfully.\n\n"
