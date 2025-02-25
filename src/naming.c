@@ -98,13 +98,11 @@ struct Convention Conventions[] = {
 
 const int n_members_in_Conventions = (sizeof(Conventions) / sizeof(struct Convention));
 
-/* 
- * Attempts to match arg_naming_convention against every Conventions[i].name in Conventions[].
- * If a match is found, dereference the pointer ptr_search_expression points to, set it to
- * Conventions[i].expr_lenient (the default) unless strict_flag is true, in which case set it
- * to Conventions[i].expr_strict. Return true. If no match is found, return false and keep 
- * search_expression NULL.
- */
+// Attempts to match arg_naming_convention against every Conventions[i].name in Conventions[].
+// If a match is found, dereference the pointer ptr_search_expression points to, set it to
+// Conventions[i].expr_lenient (the default) unless strict_flag is true, in which case set it
+// to Conventions[i].expr_strict. Return true. If no match is found, return false and keep 
+// search_expression NULL.
 bool naming_set_expression(const char *arg_naming_convention, char **ptr_search_expression)
 {
     for (int i = 0; i < n_members_in_Conventions; i++) {
@@ -120,7 +118,7 @@ bool naming_set_expression(const char *arg_naming_convention, char **ptr_search_
     return false;
 }
 
-/* Attempts to compile a pattern to a regex pointed to by *regex, returning true if successful. */
+// Attempts to compile a pattern to a regex pointed to by *regex, returning true if successful.
 bool naming_compile_regex(regex_t *regex, char *expression)
 {
     if (regcomp(regex, expression, REG_EXTENDED) != 0) {
@@ -130,7 +128,7 @@ bool naming_compile_regex(regex_t *regex, char *expression)
     return true;
 }
 
-/* Attempts to match a regex to a filename, returning true if a match. */
+// Attempts to match a regex to a filename, returning true if a match.
 bool naming_match_regex(regex_t regex, const char *filename)
 {
     int regex_return;
