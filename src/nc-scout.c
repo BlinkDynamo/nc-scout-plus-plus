@@ -30,13 +30,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <getopt.h>
 
 #include "search.h"
 #include "version.h"
 #include "help.h"
 
-int print_help(int argc)
+int builtin_exec_help(int argc)
 {
     // Input must be either nc-scout -h or nc-scout --help exactly.
     if (argc == 2) {
@@ -48,7 +47,7 @@ int print_help(int argc)
     }
 }
 
-int print_version(int argc)
+int builtin_exec_version(int argc)
 {   
     // Input must be either nc-scout -v or nc-scout --version exactly.
     if (argc == 2) {
@@ -62,42 +61,22 @@ int print_version(int argc)
 
 int main(int argc, char *argv[]) 
 {   
-    int current_opt;
-    while (1) {
-        static struct option long_options_builtins[] = 
-        {
-            {"version", no_argument, 0, 'v'},
-            {"help", no_argument, 0, 'h'},
-            {0, 0, 0, 0}
-        };
-        
-        int option_index = 0;
-        current_opt = getopt_long (argc, argv, "+vh", long_options_builtins, &option_index);
-        // Break if at the end of the options.
-        if (current_opt == -1)
-            break;
+    struct Builtin 
+    {   
+        char *name;
+        int (*execute)(int argc); // Pointer to the function that executes a builtin.
+    };
 
-        switch (current_opt) {
-        // These options return a function
-        case '?':
-            // Check for unknown options first. Exit program if found.
-            return EXIT_FAILURE;
-
-        case 'v':
-            return print_version(argc);
-
-        case 'h':
-            return print_help(argc);
-
-        default:
-            abort();
-        }
-    }
-    
     struct Subcommand 
     {   
         char *name;
         int (*execute)(int argc, char *argv[]); // Pointer to the function that executes a subcommand.
+    };
+   
+    struct Builtin Builtins[] = 
+    {
+        {"help", builtin_exec_help},
+        {"version", builtin_exec_version}
     };
 
     struct Subcommand Subcommands[] = 
@@ -106,26 +85,20 @@ int main(int argc, char *argv[])
     };
 
     int n_subcommands = sizeof(Subcommands) / sizeof(Subcommands[0]);
+    int n_builtins = sizeof(Builtins) / sizeof(Builtins[0]);
     
-    // Check for no arguments given.
-    if ((argc - optind) < 1) { 
-        printf("Incorrect usage.\nDo `nc-scout --help` for more information about usage.\n");
-        return EXIT_FAILURE;
-    }
-
-     // For the remaining command line arguments (non-options), check if the first of them is a subcommand, followed
-     // by a correct number of arguments for that subcommand's n_required_args. If so, return the appropriate subc_exec
-     // function with these followed arguments.
-    if (optind < argc) {
-        for (int i = 0; i < n_subcommands; i++) {
-            int non_option_argc = argc - optind;
-            if (strcmp(argv[optind], Subcommands[i].name) == 0) {
-                return Subcommands[i].execute(non_option_argc, &argv[optind]);
-            }
+    for (int i = 0; i < n_builtins; i++) {
+        if (strcmp(argv[1], Builtins[i].name) == 0) {
+            return Builtins[i].execute(argc);
         }
-        // If this point is reached, no valid subcommand was found.
-        printf("Error: Unknown subcommand `%s`.\n", argv[optind]);
-        printf("Do `nc-scout --help` for usage information.\n");
-        return EXIT_FAILURE;
     }
+    for (int i = 0; i < n_subcommands; i++) {
+        if (strcmp(argv[1], Subcommands[i].name) == 0) {
+            return Subcommands[i].execute(argc-1, &argv[1]);
+        }
+    }
+    // If this point is reached, no valid subcommand was found.
+    printf("Error: Unknown command `%s`.\n", argv[1]);
+    printf("Do `nc-scout --help` for usage information.\n");
+    return EXIT_FAILURE;
 }
