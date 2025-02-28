@@ -46,15 +46,16 @@ bool matches_flag   = false;
 bool strict_flag    = false;
 bool recursive_flag = false;
 
-// Expects a supported naming convention and existing directory in argv[1] and argv[2] respectively. If given these arguments, 
-// after asserting they are valid, recursively search the directory for regex matches to the convention and print them to stdout.
+// Expects a supported naming convention and existing directory in argv[1] and argv[2] respectively. 
+// If given these arguments, after asserting they are valid, recursively search the directory for 
+// regex matches to the convention and print them to stdout.
 int subc_exec_search(int argc, char *argv[])
 {
     (void)argc; // Suppress unused argument warning.
     const char *arg_naming_convention = argv[1];
     const char *arg_target_dirname = argv[2]; 
    
-    // Set by naming_match_expression to the matching Conventions[i].regex if arg_naming_convention is valid, otherwise it remains NULL.
+    // Set to Conventions[i].regex if arg_naming_convention is valid, otherwise it remains NULL.
     char *search_expression;
     // Set by naming_compile_regex() after search_expression is known to be set.
     regex_t search_regex;
