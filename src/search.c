@@ -1,8 +1,8 @@
 /**********************************************************************************************
 *
-*   search - nc-scout search handling, operation, and output. 
+*   search - Handles options, validation, and runtime of the nc-scout search subcommand.
 *
-*   LICENSE: zlib/libpng 
+*   LICENSE: zlib/libpng
 *
 *   Copyright (c) 2024-2025 Josh Hayden (@BlinkDynamo)
 *
@@ -23,7 +23,7 @@
 *   misrepresented as being the original software.
 *
 *   3. This notice may not be removed or altered from any source
-*   distribution. 
+*   distribution.
 *
 *********************************************************************************************/
 
@@ -52,43 +52,50 @@ bool strict_flag    = false;
 bool recursive_flag = false;
 
 // Returns the difference of an absolute initial path and an absolute current path.
-const char *get_relative_path(const char *abs_initial_path, const char *abs_current_path) {
-    while (*abs_initial_path && *abs_current_path && *abs_initial_path == *abs_current_path) {
+const char *get_relative_path (const char *abs_initial_path, const char *abs_current_path)
+{
+    while (*abs_initial_path && *abs_current_path && *abs_initial_path == *abs_current_path)
+    {
         abs_initial_path++;
         abs_current_path++;
     }
     return abs_current_path;
 }
 
-// Compares a d_name to a regular expression. Depends on matches_flag to be accessible.
-void process_current_file(struct dirent *dp, char abs_current_file_path[PATH_MAX], char *abs_initial_search_path, regex_t regex)
+// Compares a d_name to a regular expression. Will print matches or non-matches depending on matches_flag.
+void process_current_file (struct dirent *dp, char abs_current_file_path[PATH_MAX],
+                           char *abs_initial_search_path, regex_t regex)
 {
     // Matches:
     if (matches_flag == true) {
-        if (naming_match_regex(regex, dp->d_name)) {
-            // Matches with full path.  
-            if (full_path_flag == true) 
-                printf("%s\n", abs_current_file_path); 
+        if (naming_match_regex(regex, dp->d_name)) { 
+            // Matches with full path. 
+            if (full_path_flag == true) {
+                printf("%s\n", abs_current_file_path);
+            }
             // Matches with relative path.
-            else if (full_path_flag == false)
+            else if (full_path_flag == false) {
                 printf("%s\n", get_relative_path(abs_initial_search_path, abs_current_file_path));
+            }
         }
     }
     // Non-matches:
     else {
         if (!naming_match_regex(regex, dp->d_name)) {
             // Non-matches with full path. 
-            if (full_path_flag == true)
+            if (full_path_flag == true) {
                 printf("%s\n", abs_current_file_path);
+            }
             // Non-matches with relative path.
-            else if (full_path_flag == false)
+            else if (full_path_flag == false) {
                 printf("%s\n", get_relative_path(abs_initial_search_path, abs_current_file_path));
+            }
         }
     }
 }
 
 // Search a const char *search_path for matches to a regex_t regex.
-void search_directory(const char *search_path, regex_t regex)
+void search_directory (const char *search_path, regex_t regex)
 {
     const char *abs_search_path = canonicalize_file_name(search_path);
     
@@ -108,10 +115,12 @@ void search_directory(const char *search_path, regex_t regex)
    
     // Begin reading directories/files inside current_dir...
     struct dirent *dp;
-    while ((dp = readdir(current_dir)) != NULL) {
+    while ((dp = readdir(current_dir)) != NULL)
+    {
         // Skip current and parent entries.
-        if (strcmp(dp->d_name, ".") == 0 || strcmp(dp->d_name, "..") == 0)
+        if (strcmp(dp->d_name, ".") == 0 || strcmp(dp->d_name, "..") == 0) {
             continue;
+        }
 
         // 'abs_current_file_path' is a concatenation of abs_search_path and dp->d_name.
         char abs_current_file_path[PATH_MAX];
@@ -128,10 +137,12 @@ void search_directory(const char *search_path, regex_t regex)
         if (S_ISDIR(statbuf.st_mode)) {
             process_current_file(dp, abs_current_file_path, abs_initial_search_path, regex);
             // Recurse each subdirectory if --recursive is set.
-            if (recursive_flag)
+            if (recursive_flag == true) {
                 search_directory(abs_current_file_path, regex);
+            }
+        }
         // Else if the current file is a regular file...
-        } else if (S_ISREG(statbuf.st_mode)) { 
+        else if (S_ISREG(statbuf.st_mode)) { 
             process_current_file(dp, abs_current_file_path, abs_initial_search_path, regex);
         }
     }
@@ -139,9 +150,11 @@ void search_directory(const char *search_path, regex_t regex)
 }
 
 // The subcommand entry function called from src/nc-scout.c. argc and argv have "nc-scout" stripped.
-int subc_exec_search(int argc, char *argv[]) { 
+int subc_exec_search (int argc, char *argv[])
+{ 
     int current_opt;
-    while (1) {
+    while (1)
+    {
         static struct option long_options_search[] = 
         {
             {"full-path", no_argument, 0, 'f'}, 
@@ -154,33 +167,33 @@ int subc_exec_search(int argc, char *argv[]) {
         int option_index = 0;
         current_opt = getopt_long (argc, argv, "+fmsR", long_options_search, &option_index);
         // Break if at the end of the options.
-        if (current_opt == -1)
+        if (current_opt == -1) {
             break;
+        }
 
-        switch (current_opt) {
-        // These options return a function
-        case '?':
-            // Check for unknown options first. Exit program if found.
-            return EXIT_FAILURE;
+        switch (current_opt)
+        {
+            case '?':
+                return EXIT_FAILURE;
 
-        case 'f':
-            full_path_flag = true;
-            break;
+            case 'f':
+                full_path_flag = true;
+                break;
 
-        case 'm':
-            matches_flag = true;
-            break;
+            case 'm':
+                matches_flag = true;
+                break;
 
-        case 's':
-            strict_flag = true;
-            break;
+            case 's':
+                strict_flag = true;
+                break;
 
-        case 'R':
-            recursive_flag = true;
-            break;
+            case 'R':
+                recursive_flag = true;
+                break;
 
-        default:
-            abort();
+            default:
+                abort();
         }
     }
     
@@ -201,8 +214,8 @@ int subc_exec_search(int argc, char *argv[]) {
 
     if ((validate_target_dirname_exists(arg_target_dirname)) &&
         (naming_set_expression(arg_naming_convention, &search_expression, strict_flag)) &&
-        (naming_compile_regex(&search_regex, search_expression))) {
-        
+        (naming_compile_regex(&search_regex, search_expression)))
+    {     
         search_directory(arg_target_dirname, search_regex); 
         return EXIT_SUCCESS;
     }

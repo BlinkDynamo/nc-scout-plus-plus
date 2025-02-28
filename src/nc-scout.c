@@ -41,7 +41,8 @@ int builtin_exec_help(int argc)
     if (argc == 2) {
         printf("%s", HELP_MESSAGE);
         return EXIT_SUCCESS;
-    } else {
+    }
+    else {
         printf("Incorrect usage.\nDo `nc-scout --help` for more information about usage.\n");
         return EXIT_FAILURE;
     }
@@ -53,7 +54,8 @@ int builtin_exec_version(int argc)
     if (argc == 2) {
         printf("%s %s\n", PROGRAM_NAME, PROGRAM_VERSION);
         return EXIT_SUCCESS;
-    } else {
+    }
+    else {
         printf("Incorrect usage.\nDo `nc-scout --help` for more information about usage.\n");
         return EXIT_FAILURE;
     }
@@ -75,7 +77,11 @@ int main(int argc, char *argv[])
    
     struct Builtin Builtins[] = 
     {
+        {"--help", builtin_exec_help},
+        {"-h", builtin_exec_help},
         {"help", builtin_exec_help},
+        {"--version", builtin_exec_version},
+        {"-v", builtin_exec_version},
         {"version", builtin_exec_version}
     };
 
@@ -84,18 +90,20 @@ int main(int argc, char *argv[])
         {"search", subc_exec_search}
     };
 
-    int n_subcommands = sizeof(Subcommands) / sizeof(Subcommands[0]);
     int n_builtins = sizeof(Builtins) / sizeof(Builtins[0]);
-    
-    for (int i = 0; i < n_builtins; i++) {
+    int n_subcommands = sizeof(Subcommands) / sizeof(Subcommands[0]);
+
+    for (int i = 0; i < n_builtins; i++)
+    {
         if (strcmp(argv[1], Builtins[i].name) == 0) {
             return Builtins[i].execute(argc);
         }
     }
-    for (int i = 0; i < n_subcommands; i++) {
+    for (int i = 0; i < n_subcommands; i++)
+    {
         if (strcmp(argv[1], Subcommands[i].name) == 0) {
             // -1 and 1 to strip "nc-scout" from the input.
-            return Subcommands[i].execute(argc-1, &argv[1]);
+            return Subcommands[i].execute(argc - 1, &argv[1]);
         }
     }
     // If this point is reached, no valid subcommand was found.

@@ -106,7 +106,7 @@ bool naming_set_expression(const char *arg_naming_convention, char **ptr_search_
 {
     for (int i = 0; i < n_members_in_Conventions; i++) {
         if (strcmp(arg_naming_convention, Conventions[i].name) == 0) {
-            if (strict_flag)
+            if (strict_flag == true)
                 *ptr_search_expression = Conventions[i].expr_strict;
             else
                 *ptr_search_expression = Conventions[i].expr_lenient;
