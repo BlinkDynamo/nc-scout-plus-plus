@@ -33,6 +33,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <dirent.h>
+#include <getopt.h>
 #include <unistd.h>
 #include <errno.h>
 #include <sys/stat.h>
@@ -41,7 +42,14 @@
 #include "validate.h"
 #include "naming.h"
 #include "search.h"
-#include "nc-scout.h"
+
+// Flags.
+bool full_path_flag = false;
+bool matches_flag   = false;
+bool strict_flag    = false;
+bool recursive_flag = false;
+
+int n_required_args = 2;
 
 // Returns the difference of an absolute initial path and an absolute current path.
 const char *get_relative_path(const char *abs_initial_path, const char *abs_current_path) {
@@ -136,29 +144,81 @@ void search_directory(const char *search_path, regex_t regex)
 // Expects a supported naming convention and existing directory in argv[1] and argv[2] respectively. 
 // If given these arguments, after asserting they are valid, recursively search the directory for 
 // regex matches to the convention and print them to stdout.
-int search_subc_exec(int argc, char *argv[]) {
-    printf("argc: %d\n", argc);
-    for (int i=0; i<argc; i++) {
-        printf("argv[%d]: %s\n", i, argv[i]);
+int subc_exec_search(int argc, char *argv[]) { 
+    int current_opt;
+    while (1) {
+        static struct option long_options_search[] = 
+        {
+            {"full-path", no_argument, 0, 'f'}, 
+            {"matches", no_argument, 0, 'm'},
+            {"strict", no_argument, 0, 's'},
+            {"recursive", no_argument, 0, 'R'},
+            {0, 0, 0, 0}
+        };
+        
+        int option_index = 0;
+        current_opt = getopt_long (argc, argv, "+fmsR", long_options_search, &option_index);
+        // Break if at the end of the options.
+        if (current_opt == -1)
+            break;
+
+        switch (current_opt) {
+        // These options return a function
+        case '?':
+            // Check for unknown options first. Exit program if found.
+            return EXIT_FAILURE;
+
+        case 'f':
+            full_path_flag = true;
+            break;
+
+        case 'm':
+            matches_flag = true;
+            break;
+
+        case 's':
+            strict_flag = true;
+            break;
+
+        case 'R':
+            recursive_flag = true;
+            break;
+
+        default:
+            abort();
+        }
     }
-    const char *arg_naming_convention = argv[0];
-    const char *arg_target_dirname = argv[1]; 
-   
+     
+    int non_option_argc = argc - optind;
+    if (non_option_argc != n_required_args) {
+        printf("Error: Incorrect number of arguments (%d). Expecting %d arguments.\n", non_option_argc, n_required_args);
+        return EXIT_FAILURE;
+    }
+    
+    const char *arg_naming_convention = argv[optind];
+    const char *arg_target_dirname = argv[optind + 1]; 
+
     // Set to Conventions[i].regex if arg_naming_convention is valid, otherwise it remains NULL.
     char *search_expression;
     // Set by naming_compile_regex() after search_expression is known to be set.
     regex_t search_regex;
 
     if ((validate_target_dirname_exists(arg_target_dirname)) &&
-        (naming_set_expression(arg_naming_convention, &search_expression)) &&
+        (naming_set_expression(arg_naming_convention, &search_expression, strict_flag)) &&
         (naming_compile_regex(&search_regex, search_expression))) {
         
         search_directory(arg_target_dirname, search_regex);
+        /*
+        printf("flags: f:%d m:%d s:%d r:%d\n", full_path_flag, matches_flag, strict_flag, recursive_flag);
+        printf("optind: %d\n", optind);
+        printf("argc: %d\n", argc);
+        for (int i=optind; i<argc; i++) {
+            printf("argv[%d]: %s\n", i, argv[i]);
+        }
+        */
         return EXIT_SUCCESS;
     }
     return EXIT_FAILURE;
-
-    return 0;
 }
 
 

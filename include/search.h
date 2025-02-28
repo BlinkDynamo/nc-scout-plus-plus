@@ -32,6 +32,6 @@
 
 #include <regex.h>
 
-int search_subc_exec(int argc, char *argv[]);
+int subc_exec_search(int argc, char *argv[]);
 
 #endif

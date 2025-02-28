@@ -31,25 +31,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <getopt.h>
-#include <regex.h>
 
-#include "nc-scout.h"
-#include "validate.h"
-#include "naming.h"
 #include "search.h"
 #include "version.h"
 #include "help.h"
 
-// Flag externs.
-bool full_path_flag = false;
-bool matches_flag   = false;
-bool strict_flag    = false;
-bool recursive_flag = false;
-
 int print_help(int argc)
 {
-    // Input must be either nc-scout -h or nc-scout --help exactly to recieve the general nc-scout help.
-    // Otherwise, they likely intend to recieve help regarding a command directly preceding -h or --help.
+    // Input must be either nc-scout -h or nc-scout --help exactly.
     if (argc == 2) {
         printf("%s", HELP_MESSAGE);
         return EXIT_SUCCESS;
@@ -75,19 +64,15 @@ int main(int argc, char *argv[])
 {   
     int current_opt;
     while (1) {
-        static struct option long_options[] = 
+        static struct option long_options_builtins[] = 
         {
             {"version", no_argument, 0, 'v'},
             {"help", no_argument, 0, 'h'},
-            {"full-path", no_argument, 0, 'f'}, 
-            {"matches", no_argument, 0, 'm'},
-            {"strict", no_argument, 0, 's'},
-            {"recursive", no_argument, 0, 'R'},
             {0, 0, 0, 0}
         };
         
         int option_index = 0;
-        current_opt = getopt_long (argc, argv, "vhfmsR", long_options, &option_index);
+        current_opt = getopt_long (argc, argv, "+vh", long_options_builtins, &option_index);
         // Break if at the end of the options.
         if (current_opt == -1)
             break;
@@ -103,22 +88,6 @@ int main(int argc, char *argv[])
 
         case 'h':
             return print_help(argc);
-        // These options set flags
-        case 'f':
-            full_path_flag = true;
-            break;
-
-        case 'm':
-            matches_flag = true;
-            break;
-
-        case 's':
-            strict_flag = true;
-            break;
-
-        case 'R':
-            recursive_flag = true;
-            break;
 
         default:
             abort();
@@ -133,7 +102,7 @@ int main(int argc, char *argv[])
 
     struct Subcommand Subcommands[] = 
     {
-        {"search", search_subc_exec}
+        {"search", subc_exec_search}
     };
 
     int n_subcommands = sizeof(Subcommands) / sizeof(Subcommands[0]);
@@ -151,9 +120,7 @@ int main(int argc, char *argv[])
         for (int i = 0; i < n_subcommands; i++) {
             int non_option_argc = argc - optind;
             if (strcmp(argv[optind], Subcommands[i].name) == 0) {
-                printf("Subcommands[i].name: %s\n", Subcommands[i].name);
-                // '- 1' and '+ 1' to strip the Subcommands[i].name from the arguments.
-                return Subcommands[i].execute(non_option_argc - 1, &argv[optind + 1]);
+                return Subcommands[i].execute(non_option_argc, &argv[optind]);
             }
         }
         // If this point is reached, no valid subcommand was found.
