@@ -22,10 +22,11 @@ nc-scout [OPTION]? [COMMAND] [CONVENTION] [DIRECTORY]
 ### Options
 | Flag              | Description                                                              |
 |-------------------|--------------------------------------------------------------------------|
-| `-h, --help`      | Show a helpful message.                                                  |
 | `-v, --version`   | Show what version of the program you are using.                          |
+| `-h, --help`      | Show a helpful message.                                                  |
 | `-f, --full-path` | Display the full path of matching files instead of relative paths.       |
 | `-m, --matches`   | Print matches instead of non-matches.                                    |
+| `-s, --strict`    | Search for the naming convention strictly.                               |
 | `-R, --recursive` | Recursively search through subdirectories.                               |
 
 ### Commands
@@ -37,13 +38,13 @@ nc-scout [OPTION]? [COMMAND] [CONVENTION] [DIRECTORY]
 ### Conventions
 | Convention        | Example                                                                  |
 |-------------------|--------------------------------------------------------------------------|
-| `flatcase`        | examplefilename.txt                                                      |
 | `camelcase`       | exampleFileName.txt                                                      |
+| `cobolcase`       | EXAMPLE-FILE-NAME.txt                                                    |
+| `constantcase`    | EXAMPLE_FILE_NAME.txt                                                    |
+| `flatcase`        | examplefilename.txt                                                      |
+| `kebabcase`       | example-file-name.txt                                                    |
 | `pascalcase`      | ExampleFileName.txt                                                      |
 | `snakecase`       | example_file_name.txt                                                    |
-| `constantcase`    | EXAMPLE_FILE_NAME.txt                                                    |
-| `kebabcase`       | example-file-name.txt                                                    |
-| `cobolcase`       | EXAMPLE-FILE-NAME.txt                                                    |
 
 ### What is the Filename Body of a Filename?
 The **filename body** is the text of a file's full filename, ignoring leading periods and file extentions. The final period itself and the text that follows it is what is defined as the file extention. `search` is only performed on the filename body of a filename.
