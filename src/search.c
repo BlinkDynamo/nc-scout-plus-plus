@@ -137,9 +137,12 @@ void search_directory(const char *search_path, regex_t regex)
 // If given these arguments, after asserting they are valid, recursively search the directory for 
 // regex matches to the convention and print them to stdout.
 int search_subc_exec(int argc, char *argv[]) {
-    (void)argc; // Suppress unused argument warning.
-    const char *arg_naming_convention = argv[1];
-    const char *arg_target_dirname = argv[2]; 
+    printf("argc: %d\n", argc);
+    for (int i=0; i<argc; i++) {
+        printf("argv[%d]: %s\n", i, argv[i]);
+    }
+    const char *arg_naming_convention = argv[0];
+    const char *arg_target_dirname = argv[1]; 
    
     // Set to Conventions[i].regex if arg_naming_convention is valid, otherwise it remains NULL.
     char *search_expression;

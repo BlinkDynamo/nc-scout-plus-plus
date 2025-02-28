@@ -152,7 +152,8 @@ int main(int argc, char *argv[])
             int non_option_argc = argc - optind;
             if (strcmp(argv[optind], Subcommands[i].name) == 0) {
                 printf("Subcommands[i].name: %s\n", Subcommands[i].name);
-                return Subcommands[i].execute(non_option_argc, &argv[optind]);
+                // '- 1' and '+ 1' to strip the Subcommands[i].name from the arguments.
+                return Subcommands[i].execute(non_option_argc - 1, &argv[optind + 1]);
             }
         }
         // If this point is reached, no valid subcommand was found.
