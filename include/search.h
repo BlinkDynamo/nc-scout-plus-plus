@@ -32,6 +32,6 @@
 
 #include <regex.h>
 
-void search_directory(const char *dir_path, regex_t regex);
+int search_subc_exec(int argc, char *argv[]);
 
 #endif

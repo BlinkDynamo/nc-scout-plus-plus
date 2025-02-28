@@ -46,30 +46,6 @@ bool matches_flag   = false;
 bool strict_flag    = false;
 bool recursive_flag = false;
 
-// Expects a supported naming convention and existing directory in argv[1] and argv[2] respectively. 
-// If given these arguments, after asserting they are valid, recursively search the directory for 
-// regex matches to the convention and print them to stdout.
-int subc_exec_search(int argc, char *argv[])
-{
-    (void)argc; // Suppress unused argument warning.
-    const char *arg_naming_convention = argv[1];
-    const char *arg_target_dirname = argv[2]; 
-   
-    // Set to Conventions[i].regex if arg_naming_convention is valid, otherwise it remains NULL.
-    char *search_expression;
-    // Set by naming_compile_regex() after search_expression is known to be set.
-    regex_t search_regex;
-
-    if ((validate_target_dirname_exists(arg_target_dirname)) &&
-        (naming_set_expression(arg_naming_convention, &search_expression)) &&
-        (naming_compile_regex(&search_regex, search_expression))) {
-        
-        search_directory(arg_target_dirname, search_regex);
-        return EXIT_SUCCESS;
-    }
-    return EXIT_FAILURE;
-}
-
 int print_help(int argc)
 {
     // Input must be either nc-scout -h or nc-scout --help exactly to recieve the general nc-scout help.
@@ -157,7 +133,7 @@ int main(int argc, char *argv[])
 
     struct Subcommand Subcommands[] = 
     {
-        {"search", subc_exec_search}
+        {"search", search_subc_exec}
     };
 
     int n_subcommands = sizeof(Subcommands) / sizeof(Subcommands[0]);
@@ -175,6 +151,7 @@ int main(int argc, char *argv[])
         for (int i = 0; i < n_subcommands; i++) {
             int non_option_argc = argc - optind;
             if (strcmp(argv[optind], Subcommands[i].name) == 0) {
+                printf("Subcommands[i].name: %s\n", Subcommands[i].name);
                 return Subcommands[i].execute(non_option_argc, &argv[optind]);
             }
         }

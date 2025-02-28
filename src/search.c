@@ -132,3 +132,30 @@ void search_directory(const char *search_path, regex_t regex)
     }
     closedir(current_dir);
 }
+
+// Expects a supported naming convention and existing directory in argv[1] and argv[2] respectively. 
+// If given these arguments, after asserting they are valid, recursively search the directory for 
+// regex matches to the convention and print them to stdout.
+int search_subc_exec(int argc, char *argv[]) {
+    (void)argc; // Suppress unused argument warning.
+    const char *arg_naming_convention = argv[1];
+    const char *arg_target_dirname = argv[2]; 
+   
+    // Set to Conventions[i].regex if arg_naming_convention is valid, otherwise it remains NULL.
+    char *search_expression;
+    // Set by naming_compile_regex() after search_expression is known to be set.
+    regex_t search_regex;
+
+    if ((validate_target_dirname_exists(arg_target_dirname)) &&
+        (naming_set_expression(arg_naming_convention, &search_expression)) &&
+        (naming_compile_regex(&search_regex, search_expression))) {
+        
+        search_directory(arg_target_dirname, search_regex);
+        return EXIT_SUCCESS;
+    }
+    return EXIT_FAILURE;
+
+    return 0;
+}
+
+
