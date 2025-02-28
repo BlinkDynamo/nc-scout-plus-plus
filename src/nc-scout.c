@@ -149,19 +149,18 @@ int main(int argc, char *argv[])
         }
     }
     
-    struct subcommand 
+    struct Subcommand 
     {   
         char *name;
-        int n_required_args; // Only sub-arguments to the subcommand. Does not include the subcommand itself.
         int (*execute)(int argc, char *argv[]); // Pointer to the function that executes a subcommand.
     };
 
-    struct subcommand subcommands[] = 
+    struct Subcommand Subcommands[] = 
     {
-        {"search", 2, subc_exec_search}
+        {"search", subc_exec_search}
     };
 
-    int n_subcommands = sizeof(subcommands) / sizeof(subcommands[0]);
+    int n_subcommands = sizeof(Subcommands) / sizeof(Subcommands[0]);
     
     // Check for no arguments given.
     if ((argc - optind) < 1) { 
@@ -173,18 +172,15 @@ int main(int argc, char *argv[])
      // by a correct number of arguments for that subcommand's n_required_args. If so, return the appropriate subc_exec
      // function with these followed arguments.
     if (optind < argc) {
-        bool subcommand_valid_match_found = false;
         for (int i = 0; i < n_subcommands; i++) {
             int non_option_argc = argc - optind;
-            if ((strcmp(argv[optind], subcommands[i].name) == 0) && 
-                (subcommands[i].n_required_args == (non_option_argc - 1))) // -1 to account for command itself.
-            return subcommands[i].execute(non_option_argc, &argv[optind]);
+            if (strcmp(argv[optind], Subcommands[i].name) == 0) {
+                return Subcommands[i].execute(non_option_argc, &argv[optind]);
+            }
         }
-
-        if (!subcommand_valid_match_found) {
-            printf("Error: Unknown subcommand `%s`.\n", argv[optind]);
-            printf("Do `nc-scout --help` for usage information.\n");
-            return EXIT_FAILURE;
-        }
+        // If this point is reached, no valid subcommand was found.
+        printf("Error: Unknown subcommand `%s`.\n", argv[optind]);
+        printf("Do `nc-scout --help` for usage information.\n");
+        return EXIT_FAILURE;
     }
 }
