@@ -70,7 +70,7 @@ int subc_exec_search(int argc, char *argv[])
     return EXIT_FAILURE;
 }
 
-int subc_exec_help(int argc)
+int print_help(int argc)
 {
     // Input must be either nc-scout -h or nc-scout --help exactly to recieve the general nc-scout help.
     // Otherwise, they likely intend to recieve help regarding a command directly preceding -h or --help.
@@ -83,7 +83,7 @@ int subc_exec_help(int argc)
     }
 }
 
-int subc_exec_version(int argc)
+int print_version(int argc)
 {   
     // Input must be either nc-scout -v or nc-scout --version exactly.
     if (argc == 2) {
@@ -123,10 +123,10 @@ int main(int argc, char *argv[])
             return EXIT_FAILURE;
 
         case 'v':
-            return subc_exec_version(argc);
+            return print_version(argc);
 
         case 'h':
-            return subc_exec_help(argc);
+            return print_help(argc);
         // These options set flags
         case 'f':
             full_path_flag = true;
