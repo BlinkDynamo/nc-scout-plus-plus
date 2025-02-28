@@ -94,6 +94,7 @@ int main(int argc, char *argv[])
     }
     for (int i = 0; i < n_subcommands; i++) {
         if (strcmp(argv[1], Subcommands[i].name) == 0) {
+            // -1 and 1 to strip "nc-scout" from the input.
             return Subcommands[i].execute(argc-1, &argv[1]);
         }
     }

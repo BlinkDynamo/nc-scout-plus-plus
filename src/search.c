@@ -138,8 +138,7 @@ void search_directory(const char *search_path, regex_t regex)
     closedir(current_dir);
 }
 
-// The subcommand entry function called from src/nc-scout.c. Is given a stripped argc and argv[], 
-// with "nc-scout" and "search" removed. 
+// The subcommand entry function called from src/nc-scout.c. argc and argv have "nc-scout" stripped.
 int subc_exec_search(int argc, char *argv[]) { 
     int current_opt;
     while (1) {
@@ -184,16 +183,14 @@ int subc_exec_search(int argc, char *argv[]) {
             abort();
         }
     }
-     
+    
     int non_option_argc = argc - optind;
     if (non_option_argc != N_REQUIRED_ARGS) {
-        printf("Error: Incorrect number of arguments (%d). Expecting %d arguments.\n", non_option_argc, N_REQUIRED_ARGS);
+        printf("Error: Incorrect number of arguments (%d). ", non_option_argc);
+        printf("Expecting %d arguments: [CONVENTION] [DIRECTORY]\n", N_REQUIRED_ARGS);
+        printf("Usage: nc-scout search <OPTIONS> [CONVENTION] [DIRECTORY].\n");
         return EXIT_FAILURE;
     }
-    for (int i=0; i<argc; i++) {
-       printf("argv[%d]: %s\n", i, argv[i]); 
-    }
-
     const char *arg_naming_convention = argv[optind];
     const char *arg_target_dirname = argv[optind + 1]; 
 
@@ -211,5 +208,3 @@ int subc_exec_search(int argc, char *argv[]) {
     }
     return EXIT_FAILURE;
 }
-
-
