@@ -102,7 +102,8 @@ const int n_members_in_Conventions = (sizeof(Conventions) / sizeof(struct Conven
 // Conventions[i].expr_lenient (the default) unless strict_flag is true, in which case set it
 // to Conventions[i].expr_strict. Return true. If no match is found, return false and keep 
 // search_expression NULL.
-bool naming_set_expression(const char *arg_naming_convention, char **ptr_search_expression, bool strict_flag)
+bool naming_set_expression (const char *arg_naming_convention, char **ptr_search_expression, 
+                            bool strict_flag)
 {
     for (int i = 0; i < n_members_in_Conventions; i++) {
         if (strcmp(arg_naming_convention, Conventions[i].name) == 0) {
@@ -118,7 +119,7 @@ bool naming_set_expression(const char *arg_naming_convention, char **ptr_search_
 }
 
 // Attempts to compile a pattern to a regex pointed to by *regex, returning true if successful.
-bool naming_compile_regex(regex_t *regex, char *expression)
+bool naming_compile_regex (regex_t *regex, char *expression)
 {
     if (regcomp(regex, expression, REG_EXTENDED) != 0) {
         fprintf(stderr, "Error: Failed to compile regex.\n");
@@ -128,7 +129,7 @@ bool naming_compile_regex(regex_t *regex, char *expression)
 }
 
 // Attempts to match a regex to a filename, returning true if a match.
-bool naming_match_regex(regex_t regex, const char *filename)
+bool naming_match_regex (regex_t regex, const char *filename)
 {
     int regex_return;
     regex_return = regexec(&regex, filename, 0, NULL, 0);

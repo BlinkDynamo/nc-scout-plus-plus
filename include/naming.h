@@ -39,10 +39,10 @@ struct Convention {
     char *expr_lenient;
 };
 
-bool naming_set_expression(const char *arg_naming_convention, char **ptr_search_expression, bool strict_flag);
+bool naming_set_expression (const char *arg_naming_convention, char **ptr_search_expression, bool strict_flag);
 
-bool naming_compile_regex(regex_t *regex, char *search_expression);
+bool naming_compile_regex (regex_t *regex, char *search_expression);
 
-bool naming_match_regex(regex_t regex, const char *filename);
+bool naming_match_regex (regex_t regex, const char *filename);
 
 #endif

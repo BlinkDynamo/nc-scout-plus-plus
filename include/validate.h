@@ -32,6 +32,6 @@
 
 #include <stdbool.h>
 
-bool validate_target_dirname_exists(const char *target_dirname);
+bool validate_target_dirname_exists (const char *target_dirname);
 
 #endif 

@@ -33,7 +33,7 @@
 
 #include "validate.h"
 
-bool validate_target_dirname_exists(const char *target_dirname)
+bool validate_target_dirname_exists (const char *target_dirname)
 {
     if (access(target_dirname, F_OK) != 0) {
         fprintf(stderr, "Error: Directory '%s' does not exist.\n", target_dirname);
