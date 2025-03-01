@@ -39,7 +39,7 @@ int builtin_exec_help (int argc)
 {
     // Input must be either nc-scout -h or nc-scout --help exactly.
     if (argc == 2) {
-        printf("%s", HELP_MESSAGE);
+        printf("%s", HELP_DEFAULT);
         return EXIT_SUCCESS;
     }
     else {

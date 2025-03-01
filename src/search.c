@@ -39,6 +39,7 @@
 #include <sys/stat.h>
 #include <linux/limits.h>
 
+#include "help.h"
 #include "validate.h"
 #include "naming.h"
 #include "search.h"
@@ -157,6 +158,7 @@ int subc_exec_search (int argc, char *argv[])
     {
         static struct option long_options_search[] = 
         {
+            {"help", no_argument, 0, 'h'},
             {"full-path", no_argument, 0, 'f'}, 
             {"matches", no_argument, 0, 'm'},
             {"strict", no_argument, 0, 's'},
@@ -165,7 +167,7 @@ int subc_exec_search (int argc, char *argv[])
         };
         
         int option_index = 0;
-        current_opt = getopt_long (argc, argv, "+fmsR", long_options_search, &option_index);
+        current_opt = getopt_long (argc, argv, "+hfmsR", long_options_search, &option_index);
         // Break if at the end of the options.
         if (current_opt == -1) {
             break;
@@ -175,6 +177,10 @@ int subc_exec_search (int argc, char *argv[])
         {
             case '?':
                 return EXIT_FAILURE;
+
+            case 'h':
+                printf(HELP_SEARCH);
+                return EXIT_SUCCESS;
 
             case 'f':
                 full_path_flag = true;

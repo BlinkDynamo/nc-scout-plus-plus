@@ -30,21 +30,34 @@
 #ifndef HELP_H
 #define HELP_H
 
-#define HELP_MESSAGE \
-"Usage: nc-scout [OPTION]? [COMMAND] [CONVENTION] [DIRECTORY]\n" \
+// The help message displayed for `nc-scout --help`, `nc-scout -h`, or `nc-scout help` exactly.
+#define HELP_DEFAULT \
+"Usage: nc-scout <OPTIONS> [COMMAND] <COMMAND OPTIONS> [COMMAND ARGUMENTS]\n" \
+"\n" \
+"To use standalone options (--help and --version), they must be the only arguments supplied.\n" \
+"This is the case for standalone options of commands as well. Example: `nc-scout [COMMAND] --help`.\n" \
 "\n" \
 "Options:\n" \
-"  -h, --help       Show this help message\n" \
-"  -v, --version    Show the program version\n" \
-"  -f, --full-path  Display the full path of matching files instead of relative paths\n" \
-"  -m, --matches    Display matching files instead of non-matching\n" \
-"  -s, --strict     Enforce the naming convention strictly\n" \
-"  -R, --recursive  Recursively search through subdirectories\n" \
+"  -h, --help       Show this help message.\n" \
+"  -v, --version    Show the version of nc-scout you are using.\n" \
 "\n" \
 "Commands:\n" \
-"  search           Search a directory for files that do not match a naming convention\n" \
+"  search           Search a directory for files that do not match a naming convention.\n" \
 "\n" \
-"Conventions:\n" \
+""
+
+// The help message displayed for `nc-scout search --help`, `nc-scout search -h` exactly.
+#define HELP_SEARCH \
+"Usage: nc-scout search <OPTIONS> [CONVENTION] [LOCATION]\n" \
+"\n" \
+"<OPTIONS>:\n" \
+"  -h, --help       Show this help message.\n" \
+"  -f, --full-path  Display the discovered files/directories as full-paths.\n" \
+"  -m, --matches    Display matches to the convention instead of non-matches.\n" \
+"  -s, --strict     Enforce the naming convention strictly.\n" \
+"  -R, --recursive  Recursively search through subdirectories.\n" \
+"\n" \
+"[CONVENTION]:\n" \
 "  flatcase         examplefilename.txt\n" \
 "  camelcase        exampleFileName.txt\n" \
 "  pascalcase       ExampleFileName.txt\n" \
@@ -52,6 +65,15 @@
 "  constantcase     EXAMPLE_FILE_NAME.txt\n" \
 "  kebabcase        example-file-name.txt\n" \
 "  cobolcase        EXAMPLE-FILE-NAME.txt\n" \
+"\n" \
+"[LOCATION]:\n" \
+"  /var/lib/        Absolute paths to directories.\n" \
+"  ~/Documents/     Variable paths to directories.\n" \
+"  ../Homework/     Relative paths to directories.\n" \
+"\n" \
+"  It should be noted that a search will only be done on contents within a specified location.\n" \
+"  A command such as `nc-scout search -m pascalcase ~/Documents/` would not output 'Documents',\n" \
+"  even though 'Documents' is a pascalcase match.\n" \
 "\n" \
 "Strict vs. Lenient:\n" \
 "  The default enforcement of naming conventions for a search is lenient, although, using\n" \
@@ -74,4 +96,4 @@
 "\n" \
 ""
 
-#endif
+#endif // HELP_H
