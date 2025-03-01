@@ -34,4 +34,4 @@
 
 int subc_exec_search (int argc, char *argv[]);
 
-#endif
+#endif // SEARCH_H

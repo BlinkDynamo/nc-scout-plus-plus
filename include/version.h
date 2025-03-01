@@ -33,4 +33,4 @@
 #define PROGRAM_VERSION "0.2.1"
 #define PROGRAM_NAME "nc-scout"
 
-#endif
+#endif // VERSION_H

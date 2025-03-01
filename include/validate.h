@@ -34,4 +34,4 @@
 
 bool validate_target_dirname_exists (const char *target_dirname);
 
-#endif 
+#endif // VALIDATION_H

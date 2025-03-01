@@ -45,4 +45,4 @@ bool naming_compile_regex (regex_t *regex, char *search_expression);
 
 bool naming_match_regex (regex_t regex, const char *filename);
 
-#endif
+#endif // NAMING_H
