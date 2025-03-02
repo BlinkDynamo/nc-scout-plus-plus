@@ -26,14 +26,14 @@ function check_search()
 {
     local test_name="$1"            # The name of the test itself, as well as the directory the test is testing.
     local convention="$2"           # The naming convention being tested.
-    local options="$3"              # Any options being passed to nc-scout search.
+    local options="$3"              # Any options being passed to nc-scout-pp search.
     local n_expected_correct="$4"   # The expected number of lines of output from the command.
 
     (( tests_executed++ ))
 
     # Search inside the test directory of a naming convention, ignoring the name of the test directory itself.
     local n_observed_correct=$( \
-        ${BUILD_DIR}/nc-scout search ${options} ${convention} ${TESTS_DIR}/${test_name} | wc -l )
+        ${BUILD_DIR}/nc-scout-pp search ${options} ${convention} ${TESTS_DIR}/${test_name} | wc -l )
     
     if [ "$n_observed_correct" -eq "$n_expected_correct" ]; then
         printf "[${GREEN}✓${RESET}]"

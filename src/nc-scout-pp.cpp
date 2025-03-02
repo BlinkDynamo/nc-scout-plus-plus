@@ -1,6 +1,6 @@
 /**********************************************************************************************
 *
-*   nc-scout - A simple naming convention tool.
+*   nc-scout-pp - A simple naming convention tool, re-written in C++.
 *
 *   LICENSE: zlib/libpng 
 *
@@ -37,26 +37,26 @@
 
 int builtin_exec_help (int argc)
 {
-    // Input must be either nc-scout -h or nc-scout --help exactly.
+    // Input must be either nc-scout-pp -h or nc-scout-pp --help exactly.
     if (argc == 2) {
         printf("%s", HELP_DEFAULT);
         return EXIT_SUCCESS;
     }
     else {
-        printf("Incorrect usage.\nDo `nc-scout --help` for more information about usage.\n");
+        printf("Incorrect usage.\nDo `nc-scout-pp --help` for more information about usage.\n");
         return EXIT_FAILURE;
     }
 }
 
 int builtin_exec_version (int argc)
 {   
-    // Input must be either nc-scout -v or nc-scout --version exactly.
+    // Input must be either nc-scout-pp -v or nc-scout-pp --version exactly.
     if (argc == 2) {
         printf("%s %s\n", PROGRAM_NAME, PROGRAM_VERSION);
         return EXIT_SUCCESS;
     }
     else {
-        printf("Incorrect usage.\nDo `nc-scout --help` for more information about usage.\n");
+        printf("Incorrect usage.\nDo `nc-scout-pp --help` for more information about usage.\n");
         return EXIT_FAILURE;
     }
 }
@@ -65,13 +65,13 @@ int main (int argc, char *argv[])
 {   
     struct Builtin 
     {   
-        char *name;
+        const char *name;
         int (*execute)(int argc); // Pointer to the function that executes a builtin.
     };
 
     struct Subcommand 
     {   
-        char *name;
+        const char *name;
         int (*execute)(int argc, char *argv[]); // Pointer to the function that executes a subcommand.
     };
    
@@ -102,12 +102,12 @@ int main (int argc, char *argv[])
     for (int i = 0; i < n_subcommands; i++)
     {
         if (strcmp(argv[1], Subcommands[i].name) == 0) {
-            // -1 and 1 to strip "nc-scout" from the input.
+            // -1 and 1 to strip "nc-scout-pp" from the input.
             return Subcommands[i].execute(argc - 1, &argv[1]);
         }
     }
     // If this point is reached, no valid subcommand was found.
     printf("Error: Unknown command `%s`.\n", argv[1]);
-    printf("Do `nc-scout --help` for usage information.\n");
+    printf("Do `nc-scout-pp --help` for usage information.\n");
     return EXIT_FAILURE;
 }

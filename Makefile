@@ -1,8 +1,8 @@
 #----------------------------------------------------------------------------------------------#
 # Variables
 #----------------------------------------------------------------------------------------------#
-CC = gcc
-CFLAGS = -std=c99 -pedantic -Wall -Wextra -Iinclude -g
+CC = g++
+CFLAGS = -std=c++11 -Wall -Wextra -Iinclude -g
 
 # Installation prefix.
 PREFIX ?= /usr/local
@@ -14,9 +14,9 @@ SRC_DIR = src
 BIN_DIR = $(PREFIX)/bin
 
 # Important files.
-SRCS = src/nc-scout.c src/validate.c src/naming.c src/search.c	
-OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)
-EXEC = build/nc-scout
+SRCS = src/nc-scout-pp.cpp src/validate.cpp src/naming.cpp src/search.cpp	
+OBJS = $(SRCS:%.cpp=$(BUILD_DIR)/%.o)
+EXEC = build/nc-scout-pp
 TESTS_EXEC_BUILD = tests/build.sh
 TESTS_EXEC_CHECK = tests/check.sh
 
@@ -43,7 +43,7 @@ uninstall:
 $(EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $(EXEC)
 
-$(BUILD_DIR)/$(SRC_DIR)/%.o: src/%.c
+$(BUILD_DIR)/$(SRC_DIR)/%.o: src/%.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:

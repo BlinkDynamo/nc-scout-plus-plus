@@ -1,6 +1,6 @@
 /**********************************************************************************************
 *
-*   search - Handles options, validation, and runtime of the nc-scout search subcommand.
+*   search - Handles options, validation, and runtime of the nc-scout-pp search subcommand.
 *
 *   LICENSE: zlib/libpng
 *
@@ -27,7 +27,9 @@
 *
 *********************************************************************************************/
 
+#ifndef _GNU_SOURCE
 #define _GNU_SOURCE
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -150,7 +152,7 @@ void search_directory (const char *search_path, regex_t regex)
     closedir(current_dir);
 }
 
-// The subcommand entry function called from src/nc-scout.c. argc and argv have "nc-scout" stripped.
+// The subcommand entry function called from src/nc-scout-pp.cpp. argc and argv have "nc-scout-pp" stripped.
 int subc_exec_search (int argc, char *argv[])
 { 
     int current_opt;
@@ -207,14 +209,14 @@ int subc_exec_search (int argc, char *argv[])
     if (non_option_argc != N_REQUIRED_ARGS) {
         printf("Error: Incorrect number of arguments (%d). ", non_option_argc);
         printf("Expecting %d arguments: [CONVENTION] [DIRECTORY]\n", N_REQUIRED_ARGS);
-        printf("Usage: nc-scout search <OPTIONS> [CONVENTION] [DIRECTORY].\n");
+        printf("Usage: nc-scout-pp search <OPTIONS> [CONVENTION] [DIRECTORY].\n");
         return EXIT_FAILURE;
     }
     const char *arg_naming_convention = argv[optind];
     const char *arg_target_dirname = argv[optind + 1]; 
 
     // Set to Conventions[i].regex if arg_naming_convention is valid, otherwise it remains NULL.
-    char *search_expression;
+    const char *search_expression;
     // Set by naming_compile_regex() after search_expression is known to be set.
     regex_t search_regex;
 

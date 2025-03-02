@@ -1,6 +1,6 @@
 /**********************************************************************************************
 *
-*   version - The current version of nc-scout.  
+*   version - The current version of nc-scout-pp.  
 *
 *   LICENSE: zlib/libpng 
 *
@@ -30,7 +30,7 @@
 #ifndef VERSION_H
 #define VERSION_H
 
-#define PROGRAM_VERSION "0.3.0"
-#define PROGRAM_NAME "nc-scout"
+#define PROGRAM_VERSION "0.1.0"
+#define PROGRAM_NAME "nc-scout-pp"
 
 #endif // VERSION_H
