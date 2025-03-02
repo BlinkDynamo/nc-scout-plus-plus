@@ -1,6 +1,6 @@
 /**********************************************************************************************
 *
-*   naming - naming comparison for nc-scout-pp. 
+*   naming - naming comparison for nc-scout++. 
 *
 *   LICENSE: zlib/libpng 
 *

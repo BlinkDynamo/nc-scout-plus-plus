@@ -1,6 +1,6 @@
 /**********************************************************************************************
 *
-*   version - The current version of nc-scout-pp.  
+*   version - The current version of nc-scout++.  
 *
 *   LICENSE: zlib/libpng 
 *
@@ -30,25 +30,25 @@
 #ifndef HELP_HPP
 #define HELP_HPP
 
-// The help message displayed for `nc-scout-pp --help`, `nc-scout-pp -h`, or `nc-scout-pp help` exactly.
+// The help message displayed for `nc-scout++ --help`, `nc-scout++ -h`, or `nc-scout++ help` exactly.
 #define HELP_DEFAULT \
-"Usage: nc-scout-pp <OPTIONS> [COMMAND] <COMMAND OPTIONS> [COMMAND ARGUMENTS]\n" \
+"Usage: nc-scout++ <OPTIONS> [COMMAND] <COMMAND OPTIONS> [COMMAND ARGUMENTS]\n" \
 "\n" \
 "To use standalone options (--help and --version), they must be the only arguments supplied.\n" \
-"This is the case for standalone options of commands as well. Example: `nc-scout-pp [COMMAND] --help`.\n" \
+"This is the case for standalone options of commands as well. Example: `nc-scout++ [COMMAND] --help`.\n" \
 "\n" \
 "Options:\n" \
 "  -h, --help       Show this help message.\n" \
-"  -v, --version    Show the version of nc-scout-pp you are using.\n" \
+"  -v, --version    Show the version of nc-scout++ you are using.\n" \
 "\n" \
 "Commands:\n" \
 "  search           Search a directory for files that do not match a naming convention.\n" \
 "\n" \
 ""
 
-// The help message displayed for `nc-scout-pp search --help`, `nc-scout-pp search -h` exactly.
+// The help message displayed for `nc-scout++ search --help`, `nc-scout++ search -h` exactly.
 #define HELP_SEARCH \
-"Usage: nc-scout-pp search <OPTIONS> [CONVENTION] [LOCATION]\n" \
+"Usage: nc-scout++ search <OPTIONS> [CONVENTION] [LOCATION]\n" \
 "\n" \
 "<OPTIONS>:\n" \
 "  -h, --help       Show this help message.\n" \
@@ -72,7 +72,7 @@
 "  ../Homework/     Relative paths to directories.\n" \
 "\n" \
 "  It should be noted that a search will only be done on contents within a specified location.\n" \
-"  A command such as `nc-scout-pp search -m pascalcase ~/Documents/` would not output 'Documents',\n" \
+"  A command such as `nc-scout++ search -m pascalcase ~/Documents/` would not output 'Documents',\n" \
 "  even though 'Documents' is a pascalcase match.\n" \
 "\n" \
 "Strict vs. Lenient:\n" \

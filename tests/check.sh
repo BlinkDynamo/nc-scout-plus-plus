@@ -33,7 +33,7 @@ function check_search()
 
     # Search inside the test directory of a naming convention, ignoring the name of the test directory itself.
     local n_observed_correct=$( \
-        ${BUILD_DIR}/nc-scout-pp search ${options} ${convention} ${TESTS_DIR}/${test_name} | wc -l )
+        ${BUILD_DIR}/nc-scout++ search ${options} ${convention} ${TESTS_DIR}/${test_name} | wc -l )
     
     if [ "$n_observed_correct" -eq "$n_expected_correct" ]; then
         printf "[${GREEN}✓${RESET}]"

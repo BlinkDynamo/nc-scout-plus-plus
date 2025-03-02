@@ -1,6 +1,6 @@
 /**********************************************************************************************
 *
-*   search - Handles options, validation, and runtime of the nc-scout-pp search subcommand.
+*   search - Handles options, validation, and runtime of the nc-scout++ search subcommand.
 *
 *   LICENSE: zlib/libpng
 *
@@ -152,7 +152,7 @@ void search_directory (const char *search_path, regex_t regex)
     closedir(current_dir);
 }
 
-// The subcommand entry function called from src/nc-scout-pp.cpp. argc and argv have "nc-scout-pp" stripped.
+// The subcommand entry function called from src/nc-scout++.cpp. argc and argv have "nc-scout++" stripped.
 int subc_exec_search (int argc, char *argv[])
 { 
     int current_opt;
@@ -209,7 +209,7 @@ int subc_exec_search (int argc, char *argv[])
     if (non_option_argc != N_REQUIRED_ARGS) {
         printf("Error: Incorrect number of arguments (%d). ", non_option_argc);
         printf("Expecting %d arguments: [CONVENTION] [DIRECTORY]\n", N_REQUIRED_ARGS);
-        printf("Usage: nc-scout-pp search <OPTIONS> [CONVENTION] [DIRECTORY].\n");
+        printf("Usage: nc-scout++ search <OPTIONS> [CONVENTION] [DIRECTORY].\n");
         return EXIT_FAILURE;
     }
     const char *arg_naming_convention = argv[optind];

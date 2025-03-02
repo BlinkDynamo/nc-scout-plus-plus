@@ -14,9 +14,9 @@ SRC_DIR = src
 BIN_DIR = $(PREFIX)/bin
 
 # Important files.
-SRCS = src/nc-scout-pp.cpp src/validate.cpp src/naming.cpp src/search.cpp	
+SRCS = src/main.cpp src/validate.cpp src/naming.cpp src/search.cpp	
 OBJS = $(SRCS:%.cpp=$(BUILD_DIR)/%.o)
-EXEC = build/nc-scout-pp
+EXEC = build/nc-scout++
 TESTS_EXEC_BUILD = tests/build.sh
 TESTS_EXEC_CHECK = tests/check.sh
 
