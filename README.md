@@ -1,4 +1,4 @@
-# ![nc-scout-pp](img/nc-scout-pp.png)
+# ![nc-scout++](img/nc-scout++.png)
 
 ## Index
 * [Description](#description)
