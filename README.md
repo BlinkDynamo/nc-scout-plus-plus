@@ -8,7 +8,7 @@
 * [Installation](#installation)
 
 ## Description
-nc-scout-pp is a simple naming convention checker tool. It allows you to search directories for non-matching filenames to a naming convention. It is a personal tool I wanted for system cleanliness that became a larger project. It currently only supports predefined regular expressions as defined [here](src/naming.c), although, I have played with the idea of creating a configuration file based approach, where you could create a much more customized search regimen.
+nc-scout-pp is a C++ recoded fork of nc-scout 0.3.0. It is a simple naming convention checker tool. It allows you to search directories for non-matching filenames to a naming convention. It is a personal tool I wanted for system cleanliness that became a larger project. It currently only supports predefined regular expressions as defined [here](src/naming.cpp), although, I have played with the idea of creating a configuration file based approach, where you could create a much more customized search regimen.
 
 ## Dependencies
 * make
