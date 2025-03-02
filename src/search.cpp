@@ -41,10 +41,10 @@
 #include <sys/stat.h>
 #include <linux/limits.h>
 
-#include "help.h"
-#include "validate.h"
-#include "naming.h"
-#include "search.h"
+#include "help.hpp"
+#include "validate.hpp"
+#include "naming.hpp"
+#include "search.hpp"
 
 #define N_REQUIRED_ARGS 2
 

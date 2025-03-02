@@ -27,8 +27,8 @@
 *
 *********************************************************************************************/
 
-#ifndef HELP_H
-#define HELP_H
+#ifndef HELP_HPP
+#define HELP_HPP
 
 // The help message displayed for `nc-scout-pp --help`, `nc-scout-pp -h`, or `nc-scout-pp help` exactly.
 #define HELP_DEFAULT \
@@ -96,4 +96,4 @@
 "\n" \
 ""
 
-#endif // HELP_H
+#endif // HELP_HPP

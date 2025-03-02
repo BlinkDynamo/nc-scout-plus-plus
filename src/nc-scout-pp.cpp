@@ -31,9 +31,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "search.h"
-#include "version.h"
-#include "help.h"
+#include "search.hpp"
+#include "version.hpp"
+#include "help.hpp"
 
 int builtin_exec_help (int argc)
 {

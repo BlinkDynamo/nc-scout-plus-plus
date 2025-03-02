@@ -31,7 +31,7 @@
 #include <unistd.h>
 #include <string.h>
 
-#include "validate.h"
+#include "validate.hpp"
 
 bool validate_target_dirname_exists (const char *target_dirname)
 {

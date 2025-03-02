@@ -27,11 +27,11 @@
 *
 *********************************************************************************************/
 
-#ifndef SEARCH_H
-#define SEARCH_H
+#ifndef SEARCH_HPP
+#define SEARCH_HPP
 
 #include <regex.h>
 
 int subc_exec_search (int argc, char *argv[]);
 
-#endif // SEARCH_H
+#endif // SEARCH_HPP

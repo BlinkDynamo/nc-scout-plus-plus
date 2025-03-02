@@ -27,11 +27,11 @@
 *
 *********************************************************************************************/
 
-#ifndef VALIDATION_H
-#define VALIDATION_H
+#ifndef VALIDATION_HPP
+#define VALIDATION_HPP
 
 #include <stdbool.h>
 
 bool validate_target_dirname_exists (const char *target_dirname);
 
-#endif // VALIDATION_H
+#endif // VALIDATION_HPP

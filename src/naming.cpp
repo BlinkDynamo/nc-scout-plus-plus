@@ -67,7 +67,7 @@
 #include <string.h>
 #include <regex.h>
 
-#include "naming.h"
+#include "naming.hpp"
 
 #define EXPR_FLATCASE_STRICT        "^\\.?[a-z0-9]+(\\.[A-Za-z0-9]+)?$"
 #define EXPR_CAMELCASE_STRICT       "^\\.?[a-z]+([A-Z][a-z0-9]+)+(\\.[A-Za-z0-9]+)?$"
