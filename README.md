@@ -8,16 +8,16 @@
 * [Installation](#installation)
 
 ## Description
-nc-scout-pp is a C++ recoded fork of nc-scout 0.3.0. It is a simple naming convention checker tool. It allows you to search directories for non-matching filenames to a naming convention. It is a personal tool I wanted for system cleanliness that became a larger project. It currently only supports predefined regular expressions as defined [here](src/naming.cpp), although, I have played with the idea of creating a configuration file based approach, where you could create a much more customized search regimen.
+nc-scout++ is a C++ recoded fork of nc-scout 0.3.0. It is a simple naming convention checker tool. It allows you to search directories for non-matching filenames to a naming convention. It is a personal tool I wanted for system cleanliness that became a larger project. It currently only supports predefined regular expressions as defined [here](src/naming.cpp), although, I have played with the idea of creating a configuration file based approach, where you could create a much more customized search regimen.
 
 ## Dependencies
 * make
 * POSIX-compliant system (Linux, MacOS)
 
 ## Usage
-The layout of a nc-scout-pp command.
+The layout of a nc-scout++ command.
 
-nc-scout-pp [OPTION]? [COMMAND] [CONVENTION] [DIRECTORY]
+nc-scout++ [OPTION]? [COMMAND] [CONVENTION] [DIRECTORY]
 
 ### Options
 | Flag              | Description                                                              |
@@ -51,14 +51,14 @@ The **filename body** is the text of a file's full filename, ignoring leading pe
 
 ```bash
 # Search for matches:
-nc-scout-pp search snakecase --matches ./
+nc-scout++ search snakecase --matches ./
 # Output:
 .example_file           # The leading period is ignored, resulting in the filename body 'example_file', which is snakecase.
 example_file.txt        # The file extention '.txt' is ignored, resulting in the filename body 'example_file', which is snakecase.
 .example_file.RAR       # The file extention '.RAR' is ignored, resulting in the filename body 'example_file', which is snakecase.
 
 # Search for non-matches: 
-nc-scout-pp search flatcase ./
+nc-scout++ search flatcase ./
 # Output:
 ..example_file          # The leading period is ignored, resulting in the filename body '.example', which is not snakecase.
 example_file.exe.txt    # The file extention '.txt' is ignored, resulting in the filename body 'example_file.exe', which is not snakecase.
@@ -84,8 +84,8 @@ Lenient matches:
 ## Build Instructions
 To begin, clone the project and go to the root of the repository:
 ```bash
-git clone https://github.com/BlinkDynamo/nc-scout-pp.git nc-scout-pp
-cd nc-scout-pp/
+git clone https://github.com/BlinkDynamo/nc-scout++.git nc-scout++
+cd nc-scout++/
 ```
 
 Build the binary:
@@ -105,14 +105,14 @@ To use the binary directly:
 ```bash
 cd build/
 # called directly from the build directory.
-./nc-scout-pp --help
+./nc-scout++ --help
 ```
 
 To install the binary and use it systemwide:
 ```bash
 sudo make install
 # called from /usr/local/bin/
-nc-scout-pp --help
+nc-scout++ --help
 ```
 
 Should you want to clean the build/ and tests/ directories:
